@@ -1,0 +1,3 @@
+# Este archivo mantiene la carpeta data/raw/ en git
+# Coloca aquí tu archivo CSV de Fragrantica
+# El CSV no se subirá a git (ver .gitignore)
