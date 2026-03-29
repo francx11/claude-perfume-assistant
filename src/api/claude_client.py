@@ -35,29 +35,12 @@ class ClaudeClient:
     ) -> Dict[str, Any]:
         """
         Envía un mensaje a Claude y retorna la respuesta.
-
-        TODO DÍA 4 (cuando implementes tools):
-        - Verificar que tools tenga el formato correcto antes de enviar
-        - Manejar respuestas que contengan tool_use blocks
-
-        Args:
-            messages: Lista de mensajes en formato [{"role": "user", "content": "..."}]
-            tools: Definiciones de tools para function calling (opcional)
-            max_tokens: Máximo de tokens en la respuesta
-
-        Returns:
-            Diccionario con la respuesta de Claude
-
-        Raises:
-            AuthenticationError: Si la API key es inválida
-            RateLimitError: Si se excede el rate limit
-            APIError: Para otros errores de la API
-
-        Ejemplo de uso:
-            messages = [{"role": "user", "content": "Hola, ¿cómo estás?"}]
-            response = client.send_message(messages)
-            print(response["content"][0]["text"])
         """
+
+        if tools is not None:
+             for tool in tools:
+                if 'name' not in tool or 'input_schema' not in tool:
+                    raise ValueError(f"Tool mal formateada, falta 'name' o 'input_schema': {tool}")
 
         msg = self.client.messages.create(
             model=self.model,
@@ -71,29 +54,17 @@ class ClaudeClient:
     def create_tool_result(self, tool_use_id: str, content: Any) -> Dict[str, Any]:
         """
         Crea un mensaje de resultado de tool para enviar a Claude.
-
-        TODO DÍA 4:
-        1. Retornar un diccionario con la estructura:
-           {
-               "role": "user",
-               "content": [
-                   {
-                       "type": "tool_result",
-                       "tool_use_id": tool_use_id,
-                       "content": str(content)  # Convertir a string si no lo es
-                   }
-               ]
-           }
-
-        ¿Por qué necesitamos esto?
-        Cuando Claude usa una tool, debemos enviarle el resultado en este formato
-        específico para que pueda continuar la conversación.
-
-        Args:
-            tool_use_id: ID del tool_use block que generó Claude
-            content: Resultado de ejecutar la tool
-
-        Returns:
-            Mensaje formateado para enviar a Claude
         """
-        pass
+        
+        return {
+            "role": "user",
+            "content": [
+                {
+                    "type": "tool_result",
+                    "tool_use_id": tool_use_id,
+                    "content": str(content)
+                }
+            ]
+        }
+
+    

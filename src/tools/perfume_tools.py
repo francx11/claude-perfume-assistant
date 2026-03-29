@@ -18,30 +18,17 @@ class PerfumeTools:
     def __init__(self, data_loader, rag_retriever=None):
         """
         Inicializa las tools.
-
-        TODO DÍA 4:
-        1. Guardar data_loader como atributo
-        2. Guardar rag_retriever como atributo (puede ser None al inicio)
-
-        Args:
-            data_loader: Instancia de DataLoader
-            rag_retriever: Instancia de RAGRetriever (opcional, se agrega en día 7)
         """
-        pass
+        self.data_loader = data_loader
+        self.rag_retriever = rag_retriever
 
     def get_tools_definitions(self) -> List[Dict[str, Any]]:
         """
         Retorna las definiciones de tools en formato Anthropic.
+        """
+        tool_definitions = []
 
-        TODO DÍA 4:
-        1. Crear una lista con definiciones de tools
-        2. Cada tool debe tener:
-           - name: nombre en snake_case
-           - description: qué hace la tool
-           - input_schema: JSON Schema con los parámetros
-
-        Ejemplo de una tool:
-        {
+        tool_definitions.append({
             "name": "search_perfumes",
             "description": "Busca perfumes por criterios específicos como marca, notas, temporada",
             "input_schema": {
@@ -63,17 +50,44 @@ class PerfumeTools:
                     }
                 }
             }
-        }
+        })
 
-        Tools a implementar:
-        1. search_perfumes: Buscar por criterios
-        2. get_perfume_details: Obtener detalles de un perfume específico
-        3. recommend_similar: Recomendar perfumes similares (día 7, requiere RAG)
+        tool_definitions.append({
+            "name": "get_perfume_details",
+            "description": "Obtiene los detalles completos de un perfume por su ID",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "perfume_id": {
+                        "type": "string",
+                        "description": "ID único del perfume (ej: dior-sauvage)"
+                    }
+                },
+                "required": ["perfume_id"]
+            }
+        })
 
-        Returns:
-            Lista de definiciones de tools
-        """
-        pass
+        tool_definitions.append(  {
+            "name": "recommend_similar",
+            "description": "Recomienda perfumes similares",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "perfume_id": {
+                        "type": "string",
+                        "description": "ID único del perfume (ej: dior-sauvage)"
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "description": "Número de perfumes similares a retornar",
+                        "default": 3
+                    }
+                },
+                "required": ["perfume_id"]
+            }
+        })
+
+        return tool_definitions
 
     def search_perfumes(
         self,
@@ -85,91 +99,53 @@ class PerfumeTools:
     ) -> List[Dict[str, Any]]:
         """
         Busca perfumes por criterios específicos.
-
-        TODO DÍA 4:
-        1. Construir diccionario de filtros con los parámetros no-None
-        2. Llamar a data_loader.filter_perfumes(filters)
-        3. Limitar resultados a max_results
-        4. Retornar lista de perfumes
-
-        Args:
-            brand: Marca del perfume
-            notes: Lista de notas olfativas
-            season: Temporada
-            gender: Género objetivo
-            max_results: Máximo número de resultados
-
-        Returns:
-            Lista de perfumes que cumplen los criterios
         """
-        pass
+
+        filters = {
+            k: v for k, v in {
+                "brand": brand,
+                "notes": notes,
+                "season": season,
+                "gender": gender
+            }.items() if v is not None
+        }
+
+        results = self.data_loader.filter_perfumes(filters)
+        return results[:max_results]
 
     def get_perfume_details(self, perfume_id: str) -> Dict[str, Any]:
         """
         Obtiene detalles completos de un perfume.
-
-        TODO DÍA 4:
-        1. Llamar a data_loader.get_perfume_by_id(perfume_id)
-        2. Si no existe, retornar {"error": "Perfume no encontrado"}
-        3. Si existe, retornar el diccionario del perfume
-
-        Args:
-            perfume_id: ID del perfume
-
-        Returns:
-            Diccionario con datos del perfume o error
         """
-        pass
+        perfume = self.data_loader.get_perfume_by_id(perfume_id)
+
+        if perfume is None:
+            return {"error": "Pefume no encontrado"}
+
+        return perfume
 
     def recommend_similar(self, perfume_id: str, top_k: int = 3) -> List[Dict[str, Any]]:
         """
         Recomienda perfumes similares usando RAG.
-
-        TODO DÍA 7 (no día 4):
-        1. Verificar que self.rag_retriever no sea None
-        2. Si es None, retornar {"error": "RAG no disponible"}
-        3. Llamar a rag_retriever.find_similar_to_perfume(perfume_id, top_k)
-        4. Retornar lista de perfumes similares
-
-        ¿Por qué esto es día 7?
-        Necesitas implementar el sistema RAG primero.
-        Por ahora, puedes dejar esta función con un pass o retornar error.
-
-        Args:
-            perfume_id: ID del perfume de referencia
-            top_k: Número de similares a retornar
-
-        Returns:
-            Lista de perfumes similares
         """
-        pass
+        if self.rag_retriever is None:
+            return {"error": "RAG no disponible"}
+        
+        similar_perfume = self.rag_retriever.find_similar_to_perfume(perfume_id, top_k)
+
+        return similar_perfume
 
     def execute_tool(self, tool_name: str, tool_input: Dict[str, Any]) -> Any:
         """
         Ejecuta una tool por nombre con sus parámetros.
-
-        TODO DÍA 4:
-        1. Usar un if/elif para determinar qué tool ejecutar
-        2. Llamar al método correspondiente con los parámetros de tool_input
-        3. Retornar el resultado
-        4. Si tool_name no existe, retornar {"error": "Tool no encontrada"}
-
-        Ejemplo:
-        if tool_name == "search_perfumes":
-            return self.search_perfumes(**tool_input)
-        elif tool_name == "get_perfume_details":
-            return self.get_perfume_details(**tool_input)
-        ...
-
-        ¿Por qué necesitamos esto?
-        Claude nos dirá qué tool ejecutar y con qué parámetros.
-        Este método hace el dispatch dinámico.
-
-        Args:
-            tool_name: Nombre de la tool a ejecutar
-            tool_input: Diccionario con parámetros
-
-        Returns:
-            Resultado de ejecutar la tool
         """
-        pass
+
+        match tool_name:
+            case "search_perfumes":
+                return self.search_perfumes(**tool_input)
+            case "get_perfume_details":
+                return self.get_perfume_details(**tool_input)
+            case "recommend_similar":
+                return self.recommend_similar(**tool_input)
+            case _:
+                return {"error": f"Tool no encontrada: {tool_name}"}
