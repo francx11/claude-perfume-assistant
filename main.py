@@ -14,12 +14,6 @@ load_dotenv()
 def main():
     """
     Inicia el servidor FastAPI.
-
-    TODO DÍA 5:
-    1. Verificar que las variables de entorno estén configuradas
-    2. Iniciar uvicorn con la aplicación FastAPI
-    3. Configurar host y port desde variables de entorno
-
     Comando para ejecutar:
     python main.py
 
