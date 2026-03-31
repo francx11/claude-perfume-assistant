@@ -11,7 +11,7 @@ DÍA 5: Implementarás estos endpoints para exponer tu sistema vía HTTP.
 """
 import os 
 from dotenv import load_dotenv
-from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi import FastAPI, UploadFile, HTTPException, Request
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 
@@ -55,14 +55,15 @@ async def startup_event():
 
     app.state.orchestrator = orchestrator
     app.state.data_loader = data_loader
+    app.state.perfume_tools = perfume_tools
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest) -> ChatResponse:
+async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
     """
     Endpoint principal de chat.
     """
     try:
-        result = request.app.state.orchestrator.process_query(request.message)
+        result = http_request.app.state.orchestrator.process_query(request.message)
         return ChatResponse(
             response=result["response"],
             perfumes=result.get("perfumes"),

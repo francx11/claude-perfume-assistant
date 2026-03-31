@@ -31,7 +31,8 @@ class ClaudeClient:
         self,
         messages: List[Dict[str, str]],
         tools: Optional[List[Dict[str, Any]]] = None,
-        max_tokens: int = 1024
+        max_tokens: int = 1024,
+        system: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Envía un mensaje a Claude y retorna la respuesta.
@@ -46,7 +47,8 @@ class ClaudeClient:
             model=self.model,
             messages=messages,
             max_tokens=max_tokens,
-            **({"tools": tools} if tools is not None else {})
+            **({"tools": tools} if tools is not None else {}),
+            **({"system": system} if system is not None else {})
         )
 
         return msg.model_dump()
