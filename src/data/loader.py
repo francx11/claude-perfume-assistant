@@ -50,7 +50,7 @@ class DataLoader:
         """
         Retorna todos los perfumes como lista de diccionarios.
         """
-        return self.df.to_dict('records')
+        return self.df.reset_index().to_dict('records')
 
     def get_perfume_by_id(self, perfume_id: str) -> Optional[Dict[str, Any]]:
         """
