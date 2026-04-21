@@ -19,6 +19,7 @@ from src.api.claude_client import ClaudeClient
 from src.data.loader import DataLoader
 from src.tools.perfume_tools import PerfumeTools
 from src.agents.orchestrator import OrchestratorAgent
+from src.ocr.document_processor import OCRProcessor
 
 
 class ChatRequest(BaseModel):
@@ -53,9 +54,12 @@ async def startup_event():
         perfume_tools=perfume_tools
     )
 
+    ocr_processor = OCRProcessor(tesseract_path=os.getenv("TESSERACT_PATH"))
+
     app.state.orchestrator = orchestrator
     app.state.data_loader = data_loader
     app.state.perfume_tools = perfume_tools
+    app.state.ocr_processor = ocr_processor
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
@@ -74,27 +78,24 @@ async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
 
 
 @app.post("/ocr/extract")
-async def extract_text_from_image(file: UploadFile) -> Dict[str, Any]:
+async def extract_text_from_image(file: UploadFile, http_request: Request) -> Dict[str, Any]:
     """
     Extrae texto de imagen subida.
-
-    TODO DÍA 11 (no día 5):
-    1. Validar que file sea una imagen
-    2. Leer bytes del archivo
-    3. Llamar a ocr_processor.extract_from_bytes()
-    4. Retornar texto extraído
-
-    Args:
-        file: Archivo de imagen subido
-
-    Returns:
-        Diccionario con texto extraído
-
-    Raises:
-        HTTPException: Si el archivo no es válido o hay error en OCR
     """
-    # TODO: Implementar en día 11
-    raise HTTPException(status_code=501, detail="Endpoint no implementado aún")
+    ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp", "image/tiff", "image/bmp"}
+
+    if file.content_type not in ALLOWED_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Tipo de archivo no válido: '{file.content_type}'. Se esperaba una imagen (jpeg, png, webp, tiff, bmp)."
+        )
+
+    try:
+        image_bytes = await file.read()
+        text = http_request.app.state.ocr_processor.extract_from_bytes(image_bytes)
+        return {"filename": file.filename, "extracted_text": text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/perfumes/{perfume_id}")
