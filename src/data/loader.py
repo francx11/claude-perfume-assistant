@@ -60,7 +60,7 @@ class DataLoader:
             return self.df.loc[perfume_id].to_dict()
         return None
 
-    def get_perfumes_by_ids(self, ids: List[str]) -> List[Dict[str, Any]]:
+    def get_perfumes_by_ids(self, ids: set[str]) -> List[Dict[str, Any]]:
         """
         Busca múltiples perfumes por sus IDs.
         """
@@ -73,9 +73,9 @@ class DataLoader:
         df_filtered = self.df.copy()
 
         for column, value in filters.items():
-            if isinstance(value, list):
+            if isinstance(value, (list, set)):
                 df_filtered = df_filtered[
-                    df_filtered[column].str.contains('|'.join(value), case=False, na=False)
+                    df_filtered[column].isin(set(value))
                 ]
             else:
                 df_filtered = df_filtered[
