@@ -14,7 +14,7 @@ Last updated: 2026-05-05
 | list vs tuple | [ ] | |
 | set / frozenset | [ ] | |
 | dict internals + time complexity | [ ] | |
-| mutable default argument bug | [ ] | |
+| mutable default argument bug | [x] | Default created once at def-time; use None sentinel |
 
 ### Functions
 | Topic | Status | Notes |
