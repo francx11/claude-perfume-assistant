@@ -142,6 +142,7 @@ class PerfumeTools:
 
         return similar_perfume
 
+    @log_call
     def execute_tool(self, tool_name: str, tool_input: Dict[str, Any]) -> Any:
         """
         Ejecuta una tool por nombre con sus parámetros.
