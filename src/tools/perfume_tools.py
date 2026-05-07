@@ -12,6 +12,13 @@ DÍA 4: Implementarás este módulo para darle "superpoderes" a Claude.
 from typing import List, Dict, Any, Optional
 
 
+def log_call(func):
+    def wrapper(*args, **kwargs):
+        print(f"[tool] {func.__name__} | args={args[1:]} kwargs={kwargs}")
+        return func(*args, **kwargs)
+    return wrapper
+
+
 class PerfumeTools:
     """Tools para búsqueda y recomendación de perfumes."""
 
