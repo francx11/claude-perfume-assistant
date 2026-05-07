@@ -22,7 +22,7 @@ Last updated: 2026-05-07
 | generator (yield) | [x] | yield pausa la función; Iterator[T] type hint; O(1) memoria vs O(n) lista |
 | lambda expressions | [x] | lambda p: p["name"] — función anónima de una expresión; sin return explícito |
 | decorators | [x] | @log_call = execute_tool = log_call(execute_tool); wrapper(*args,**kwargs) para ser genérico |
-| `__init__.py` purpose | [ ] | |
+| `__init__.py` purpose | [x] | marca carpeta como paquete Python; puede estar vacío o re-exportar imports |
 
 ### Already Known (from days 1–11)
 | Topic | Status | Notes |
