@@ -19,7 +19,7 @@ Last updated: 2026-05-07
 ### Functions
 | Topic | Status | Notes |
 |-------|--------|-------|
-| generator (yield) | [ ] | |
+| generator (yield) | [x] | yield pausa la función; Iterator[T] type hint; O(1) memoria vs O(n) lista |
 | lambda expressions | [ ] | |
 | decorators | [ ] | |
 | `__init__.py` purpose | [ ] | |
