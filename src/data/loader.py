@@ -10,7 +10,7 @@ DÍA 3: Implementarás este módulo después de explorar los datos en el noteboo
 """
 
 import pandas as pd
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Iterator
 
 
 class DataLoader:
@@ -50,6 +50,8 @@ class DataLoader:
         """
         Retorna todos los perfumes como lista de diccionarios.
         """
+        for i in self.df.iterrows():
+            yield i
         return self.df.reset_index().to_dict('records')
 
     def get_perfume_by_id(self, perfume_id: str) -> Optional[Dict[str, Any]]:
