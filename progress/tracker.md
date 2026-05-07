@@ -21,7 +21,7 @@ Last updated: 2026-05-07
 |-------|--------|-------|
 | generator (yield) | [x] | yield pausa la función; Iterator[T] type hint; O(1) memoria vs O(n) lista |
 | lambda expressions | [ ] | |
-| decorators | [ ] | |
+| decorators | [x] | @log_call = execute_tool = log_call(execute_tool); wrapper(*args,**kwargs) para ser genérico |
 | `__init__.py` purpose | [ ] | |
 
 ### Already Known (from days 1–11)
