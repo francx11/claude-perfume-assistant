@@ -11,9 +11,9 @@ Last updated: 2026-05-07
 ### Data Structures
 | Topic | Status | Notes |
 |-------|--------|-------|
-| list vs tuple | [ ] | |
-| set / frozenset | [ ] | |
-| dict internals + time complexity | [ ] | |
+| list vs tuple | [x] | |
+| set / frozenset | [x] | |
+| dict internals + time complexity | [x] | |
 | mutable default argument bug | [x] | Default created once at def-time; use None sentinel |
 
 ### Functions
