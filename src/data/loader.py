@@ -50,9 +50,14 @@ class DataLoader:
         """
         Retorna todos los perfumes como lista de diccionarios.
         """
-        for i in self.df.iterrows():
-            yield i
         return self.df.reset_index().to_dict('records')
+
+    def iter_perfumes(self) -> Iterator[Dict[str, Any]]:
+        """
+        Itera perfumes uno a uno sin cargar toda la lista en memoria.
+        """
+        for idx, row in self.df.iterrows():
+            yield {"id": idx, **row.to_dict()}
 
     def get_perfume_by_id(self, perfume_id: str) -> Optional[Dict[str, Any]]:
         """
