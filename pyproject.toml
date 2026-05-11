@@ -1,0 +1,43 @@
+[project]
+name = "claudecourse"
+version = "0.1.0"
+description = "PerfumeShop AI - Conversational perfume recommendation system"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic==0.39.0",
+    "python-dotenv==1.0.0",
+    "fastapi==0.115.0",
+    "uvicorn[standard]==0.32.0",
+    "pydantic==2.9.0",
+    "python-multipart==0.0.12",
+    "pandas==2.2.0",
+    "numpy==1.26.0",
+    "sentence-transformers==3.3.0",
+    "torch==2.5.0",
+    "pytesseract==0.3.13",
+    "Pillow==11.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.0",
+    "pytest-asyncio==0.24.0",
+    "hypothesis==6.122.0",
+    "httpx==0.28.0",
+    "ruff",
+    "pre-commit",
+    "interrogate",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.interrogate]
+fail-under = 80
+ignore-init-method = true
+ignore-magic = true
+verbose = 1
