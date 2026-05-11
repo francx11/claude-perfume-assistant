@@ -10,7 +10,10 @@ Este módulo coordina:
 DÍA 6: Implementarás este módulo para integrar todos los componentes.
 """
 
+import logging
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class OrchestratorAgent:
