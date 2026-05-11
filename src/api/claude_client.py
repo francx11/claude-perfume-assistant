@@ -10,9 +10,11 @@ Este módulo gestiona la comunicación con Claude, incluyendo:
 DÍA 1: Implementarás este cliente para tu primera conexión con un LLM.
 """
 
+import random
+import time
 from typing import Any, Dict, List, Optional
 
-from anthropic import Anthropic
+from anthropic import Anthropic, RateLimitError
 
 
 class ClaudeClient:
@@ -43,15 +45,22 @@ class ClaudeClient:
                 if "name" not in tool or "input_schema" not in tool:
                     raise ValueError(f"Tool mal formateada, falta 'name' o 'input_schema': {tool}")
 
-        msg = self.client.messages.create(
-            model=self.model,
-            messages=messages,
-            max_tokens=max_tokens,
-            **({"tools": tools} if tools is not None else {}),
-            **({"system": system} if system is not None else {}),
-        )
-
-        return msg.model_dump()
+        MAX_REINTENTOS = 3
+        for intento in range(MAX_REINTENTOS):
+            try:
+                msg = self.client.messages.create(
+                    model=self.model,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    **({"tools": tools} if tools is not None else {}),
+                    **({"system": system} if system is not None else {}),
+                )
+                return msg.model_dump()
+            except RateLimitError:
+                if intento == MAX_REINTENTOS - 1:
+                    raise
+                espera = 2**intento + random.random()
+                time.sleep(espera)
 
     def create_tool_result(self, tool_use_id: str, content: Any) -> Dict[str, Any]:
         """
