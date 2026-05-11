@@ -52,11 +52,11 @@ Last updated: 2026-05-11
 ### Architecture
 | Topic | Status | Notes |
 |-------|--------|-------|
-| SRP | [ ] | |
-| OCP | [ ] | |
-| LSP | [ ] | |
-| ISP | [ ] | |
-| DIP | [ ] | |
+| SRP | [x] | Una clase = una razón para cambiar; OrchestratorAgent viola SRP (prompt + tools + call) |
+| OCP | [x] | Abierto para extensión, cerrado para modificación; match/case en execute_tool viola OCP → usar registry dict |
+| LSP | [x] | Subclase debe sustituir al padre sin romper; Penguin(Bird) con fly() viola LSP → rediseñar jerarquía |
+| ISP | [x] | Interfaces pequeñas; no forzar dependencia de métodos que no se usan |
+| DIP | [x] | Inyectar dependencias desde fuera; OrchestratorAgent no debe instanciar ClaudeClient internamente |
 | Strategy pattern | [ ] | |
 | Factory pattern | [ ] | |
 | Observer pattern | [ ] | |
