@@ -173,6 +173,7 @@ async def get_all_perfumes() -> List[Dict[str, Any]]:
 
 @app.get("/perfumes/{perfume_id}/similar")
 async def get_similar_perfumes(perfume_id: str, top_k: int = 3) -> List[Dict[str, Any]]:
+    """Retorna los top_k perfumes más similares al perfume dado."""
     try:
         result = app.state.perfume_tools.recommend_similar(perfume_id, top_k)
         if "error" in result:
