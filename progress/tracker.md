@@ -57,11 +57,11 @@ Last updated: 2026-05-11
 | LSP | [x] | Subclase debe sustituir al padre sin romper; Penguin(Bird) con fly() viola LSP → rediseñar jerarquía |
 | ISP | [x] | Interfaces pequeñas; no forzar dependencia de métodos que no se usan |
 | DIP | [x] | Inyectar dependencias desde fuera; OrchestratorAgent no debe instanciar ClaudeClient internamente |
-| Strategy pattern | [ ] | |
-| Factory pattern | [ ] | |
-| Observer pattern | [ ] | |
-| Repository pattern | [ ] | |
-| Dependency Injection | [ ] | |
+| Strategy pattern | [x] | registry dict en execute_tool(); comportamientos intercambiables detrás de interfaz común |
+| Factory pattern | [x] | startup_event() construye y conecta objetos; útil cuando construcción es compleja o tipo depende de config |
+| Observer pattern | [x] | subject emite eventos, observers suscritos reciben notificación; WebSockets en Loopgate |
+| Repository pattern | [x] | DataLoader oculta que datos vienen de CSV; si migras a PostgreSQL los endpoints no cambian |
+| Dependency Injection | [x] | proveer dependencias desde fuera; facilita tests (Mock) y desacoplamiento; ver DIP |
 
 ### Production Python
 | Topic | Status | Notes |
