@@ -145,13 +145,12 @@ class PerfumeTools:
         """
         Ejecuta una tool por nombre con sus parámetros.
         """
-
-        match tool_name:
-            case "search_perfumes":
-                return self.search_perfumes(**tool_input)
-            case "get_perfume_details":
-                return self.get_perfume_details(**tool_input)
-            case "recommend_similar":
-                return self.recommend_similar(**tool_input)
-            case _:
-                return {"error": f"Tool no encontrada: {tool_name}"}
+        registry = {
+            "search_perfumes": self.search_perfumes,
+            "get_perfume_details": self.get_perfume_details,
+            "recommend_similar": self.recommend_similar,
+        }
+        handler = registry.get(tool_name)
+        if handler is None:
+            return {"error": f"Tool no encontrada: {tool_name}"}
+        return handler(**tool_input)
