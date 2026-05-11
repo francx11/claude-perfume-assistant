@@ -163,6 +163,7 @@ async def search(
 
 @app.get("/perfumes")
 async def get_all_perfumes() -> List[Dict[str, Any]]:
+    """Retorna todos los perfumes del catálogo."""
     try:
         result = app.state.data_loader.get_all_perfumes()
         return result
