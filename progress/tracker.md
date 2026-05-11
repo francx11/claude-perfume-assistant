@@ -66,7 +66,7 @@ Last updated: 2026-05-11
 ### Production Python
 | Topic | Status | Notes |
 |-------|--------|-------|
-| scalable logging (structlog / logging module) | [ ] | |
+| scalable logging (structlog / logging module) | [x] | getLogger(__name__) por módulo; basicConfig en startup; INFO/DEBUG/ERROR por volumen; structured con extra={} |
 | error handling in distributed systems | [ ] | |
 | retry + exponential backoff | [ ] | |
 | circuit breaker | [ ] | |

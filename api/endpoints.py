@@ -9,50 +9,59 @@ Este módulo expone:
 
 DÍA 5: Implementarás estos endpoints para exponer tu sistema vía HTTP.
 """
-import os 
-from dotenv import load_dotenv
-from fastapi import FastAPI, UploadFile, HTTPException, Request
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
 
+import logging
+import os
+from typing import Any, Dict, List, Optional
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Request, UploadFile
+from pydantic import BaseModel
+
+from src.agents.orchestrator import OrchestratorAgent
 from src.api.claude_client import ClaudeClient
 from src.data.loader import DataLoader
-from src.tools.perfume_tools import PerfumeTools
-from src.agents.orchestrator import OrchestratorAgent
 from src.ocr.document_processor import OCRProcessor
+from src.tools.perfume_tools import PerfumeTools
+
+_LOG_FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
+
+
+def _configure_logging() -> None:
+    """Configure root logger with INFO level and src.* loggers with DEBUG."""
+    logging.basicConfig(level=logging.INFO, format=_LOG_FORMAT)
+    logging.getLogger("src").setLevel(logging.DEBUG)
 
 
 class ChatRequest(BaseModel):
     """Modelo de request para el endpoint de chat."""
+
     message: str
     conversation_id: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
     """Modelo de response para el endpoint de chat."""
+
     response: str
     perfumes: Optional[List[Dict[str, Any]]] = None
     conversation_id: str
 
 
 # Crear aplicación FastAPI
-app = FastAPI(
-    title="PerfumeShop AI API",
-    description="API para asistente conversacional de perfumes",
-    version="1.0.0"
-)
+app = FastAPI(title="PerfumeShop AI API", description="API para asistente conversacional de perfumes", version="1.0.0")
+
 
 @app.on_event("startup")
 async def startup_event():
+    """Initialize all application components and configure logging."""
     load_dotenv()
+    _configure_logging()
 
     claude_client = ClaudeClient(api_key=os.getenv("ANTHROPIC_API_KEY"))
     data_loader = DataLoader(csv_path=os.getenv("CSV_PATH"))
     perfume_tools = PerfumeTools(data_loader=data_loader)
-    orchestrator = OrchestratorAgent(
-        claude_client=claude_client,
-        perfume_tools=perfume_tools
-    )
+    orchestrator = OrchestratorAgent(claude_client=claude_client, perfume_tools=perfume_tools)
 
     ocr_processor = OCRProcessor(tesseract_path=os.getenv("TESSERACT_PATH"))
 
@@ -60,6 +69,7 @@ async def startup_event():
     app.state.data_loader = data_loader
     app.state.perfume_tools = perfume_tools
     app.state.ocr_processor = ocr_processor
+
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
@@ -71,7 +81,7 @@ async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
         return ChatResponse(
             response=result["response"],
             perfumes=result.get("perfumes"),
-            conversation_id=request.conversation_id or "default"
+            conversation_id=request.conversation_id or "default",
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -87,7 +97,7 @@ async def extract_text_from_image(file: UploadFile, http_request: Request) -> Di
     if file.content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(
             status_code=400,
-            detail=f"Tipo de archivo no válido: '{file.content_type}'. Se esperaba una imagen (jpeg, png, webp, tiff, bmp)."
+            detail=f"Tipo no válido: '{file.content_type}'. Se esperaba jpeg, png, webp, tiff o bmp.",
         )
 
     try:
@@ -113,38 +123,43 @@ async def get_perfume(perfume_id: str) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/health")
 async def health_check() -> Dict[str, str]:
     """
     Health check del servicio.
     """
     try:
-        orchestrator = app.state.orchestrator
-        data_loader = app.state.data_loader
+        _ = app.state.orchestrator
         return {"status": "ok", "message": "PerfumeShop AI API is running"}
     except AttributeError:
         return {"status": "error", "message": "Components not initialized"}
+
 
 @app.post("/search")
 async def search(
     brand: Optional[str] = None,
     season: Optional[str] = None,
     gender: Optional[str] = None,
-    notes: Optional[str] = None  # ej: "citrus,fresh" separado por comas
+    notes: Optional[str] = None,  # ej: "citrus,fresh" separado por comas
 ) -> List[Dict[str, Any]]:
+    """Busca perfumes por marca, temporada, género y notas."""
     try:
         filters = {
-            k: v for k, v in {
+            k: v
+            for k, v in {
                 "brand": brand,
                 "notes": notes.split(",") if notes else None,
                 "season": season,
-                "gender": gender
-            }.items() if v is not None
+                "gender": gender,
+            }.items()
+            if v is not None
         }
         results = app.state.data_loader.filter_perfumes(filters)
         return results
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/perfumes")
 async def get_all_perfumes() -> List[Dict[str, Any]]:
@@ -153,6 +168,7 @@ async def get_all_perfumes() -> List[Dict[str, Any]]:
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/perfumes/{perfume_id}/similar")
 async def get_similar_perfumes(perfume_id: str, top_k: int = 3) -> List[Dict[str, Any]]:
