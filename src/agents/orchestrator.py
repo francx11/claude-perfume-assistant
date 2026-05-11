@@ -100,9 +100,12 @@ class OrchestratorAgent:
         tool_input = tool_use_block["input"]
 
         try:
+            logger.info("tool_call", extra={"tool": tool_name, "input": tool_input})
             result = self.perfume_tools.execute_tool(tool_name=tool_name, tool_input=tool_input)
+            logger.debug("tool_result", extra={"tool": tool_name, "result": result})
             return result
         except Exception as e:
+            logger.error("tool_error", exc_info=True, extra={"tool": tool_name})
             return {"error": f"Error ejecutando tool {tool_name}: {str(e)}"}
 
     def _build_system_prompt(self) -> str:
