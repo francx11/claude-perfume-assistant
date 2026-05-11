@@ -67,9 +67,9 @@ Last updated: 2026-05-11
 | Topic | Status | Notes |
 |-------|--------|-------|
 | scalable logging (structlog / logging module) | [x] | getLogger(__name__) por módulo; basicConfig en startup; INFO/DEBUG/ERROR por volumen; structured con extra={} |
-| error handling in distributed systems | [ ] | |
-| retry + exponential backoff | [ ] | |
-| circuit breaker | [ ] | |
+| error handling in distributed systems | [x] | retry+backoff, circuit breaker, idempotency key, DLQ |
+| retry + exponential backoff | [x] | 2**intento + random.random(); RateLimitError en ClaudeClient |
+| circuit breaker | [x] | CLOSED→OPEN→HALF_OPEN; max_fallos + tiempo_reset; clase separada (OCP) |
 | data pipeline optimization (generators, chunking) | [ ] | |
 | pytest coverage (`--cov`) | [ ] | |
 | property-based testing (hypothesis) | [ ] | |
