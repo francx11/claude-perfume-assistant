@@ -10,7 +10,7 @@ Este módulo coordina:
 DÍA 6: Implementarás este módulo para integrar todos los componentes.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 class OrchestratorAgent:
@@ -26,11 +26,7 @@ class OrchestratorAgent:
 
         self.conversation_history = []
 
-    def process_query(
-        self,
-        user_message: str,
-        conversation_history: Optional[List[Dict]] = None
-    ) -> Dict[str, Any]:
+    def process_query(self, user_message: str, conversation_history: Optional[List[Dict]] = None) -> Dict[str, Any]:
         """
         Procesa una consulta del usuario y retorna respuesta.
 
@@ -47,54 +43,43 @@ class OrchestratorAgent:
 
         tools_definitions = self.perfume_tools.get_tools_definitions()
         response = self.claude_client.send_message(
-            messages=conversation_history,
-            tools=tools_definitions,
-            max_tokens=1024,
-            system=system_prompt
+            messages=conversation_history, tools=tools_definitions, max_tokens=1024, system=system_prompt
         )
 
         iteration = 0
 
         while response["stop_reason"] == "tool_use" and iteration < 5:
             conversation_history.append({"role": "assistant", "content": response["content"]})
-            
+
             # Procesar TODOS los tool_use blocks del mensaje
             tool_use_blocks = [b for b in response["content"] if b["type"] == "tool_use"]
             tool_results_content = []
-            
+
             for tool_use_block in tool_use_blocks:
                 tool_result = self._handle_tool_use(tool_use_block)
-                tool_results_content.append({
-                    "type": "tool_result",
-                    "tool_use_id": tool_use_block["id"],
-                    "content": str(tool_result)
-                })
-            
-            conversation_history.append({
-                "role": "user",
-                "content": tool_results_content
-            })
-            
+                tool_results_content.append(
+                    {"type": "tool_result", "tool_use_id": tool_use_block["id"], "content": str(tool_result)}
+                )
+
+            conversation_history.append({"role": "user", "content": tool_results_content})
+
             response = self.claude_client.send_message(
-                messages=conversation_history,
-                tools=tools_definitions,
-                max_tokens=1024,
-                system=system_prompt
+                messages=conversation_history, tools=tools_definitions, max_tokens=1024, system=system_prompt
             )
-            
+
             iteration += 1
 
         final_text = next(
-            (b["text"] for b in response["content"] if b["type"] == "text"),
-            "No se pudo generar una respuesta"
+            (b["text"] for b in response["content"] if b["type"] == "text"), "No se pudo generar una respuesta"
         )
 
         perfumes_mentioned = []
         for msg in conversation_history:
             if msg["role"] == "user":
-                for block in (msg.get("content") or []):
+                for block in msg.get("content") or []:
                     if isinstance(block, dict) and block.get("type") == "tool_result":
                         import json
+
                         try:
                             result = json.loads(block["content"])
                             if isinstance(result, list):
@@ -102,10 +87,7 @@ class OrchestratorAgent:
                         except (json.JSONDecodeError, KeyError):
                             pass
 
-        return {
-            "response": final_text,
-            "perfumes": perfumes_mentioned if perfumes_mentioned else None
-        }
+        return {"response": final_text, "perfumes": perfumes_mentioned if perfumes_mentioned else None}
 
     def _handle_tool_use(self, tool_use_block: Dict[str, Any]) -> Any:
         """
@@ -119,12 +101,13 @@ class OrchestratorAgent:
             return result
         except Exception as e:
             return {"error": f"Error ejecutando tool {tool_name}: {str(e)}"}
-            
+
     def _build_system_prompt(self) -> str:
         """
         Construye el system prompt para Claude.
         """
-        return """Eres un asistente experto en perfumes y fragancias. Tu objetivo es ayudar a los usuarios a descubrir y elegir perfumes que se adapten a sus gustos y necesidades.
+        return """Eres un asistente experto en perfumes y fragancias.
+    Tu objetivo es ayudar a los usuarios a descubrir y elegir perfumes que se adapten a sus gustos y necesidades.
 
     Tienes acceso a un catálogo de perfumes con el que puedes:
     - Buscar perfumes por marca, notas olfativas, temporada o género

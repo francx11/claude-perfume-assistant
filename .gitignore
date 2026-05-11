@@ -39,3 +39,8 @@ htmlcov/
 
 # Claude Code local settings (personal, not shared)
 .claude/settings.local.json
+
+# Claude Code agent state + Kiro extension files
+.agents/
+.kiro/
+skills-lock.json

@@ -9,8 +9,9 @@ Este módulo se encarga de:
 DÍA 7: Implementarás este módulo para tu primer sistema RAG.
 """
 
-import numpy as np
 from typing import List
+
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 

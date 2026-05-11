@@ -11,9 +11,10 @@ DIA 11: Implementaras este modulo para expandir las capacidades del sistema.
 
 import io
 import re
-from typing import Dict, Any, Optional
-from PIL import Image, ImageEnhance, ImageFilter
+from typing import Any, Dict, Optional
+
 import pytesseract
+from PIL import Image, ImageEnhance
 
 
 class OCRProcessor:
@@ -40,7 +41,7 @@ class OCRProcessor:
 
         self.pytesseract = pytesseract
 
-    def extract_text(self, image_path: str, lang: str = 'eng') -> str:
+    def extract_text(self, image_path: str, lang: str = "eng") -> str:
         """
         Extrae texto de una imagen.
 
@@ -56,7 +57,7 @@ class OCRProcessor:
         raw_text = self.pytesseract.image_to_string(image, lang=lang)
         return raw_text.strip()
 
-    def extract_from_bytes(self, image_bytes: bytes, lang: str = 'eng') -> str:
+    def extract_from_bytes(self, image_bytes: bytes, lang: str = "eng") -> str:
         """
         Extrae texto de bytes de imagen.
 
@@ -94,10 +95,7 @@ class OCRProcessor:
         # 4. Redimensionar si es muy pequeña (minimo 300px de ancho)
         if image.width < 300:
             scale = 300 / image.width
-            image = image.resize(
-                (int(image.width * scale), int(image.height * scale)),
-                Image.LANCZOS
-            )
+            image = image.resize((int(image.width * scale), int(image.height * scale)), Image.LANCZOS)
 
         return image
 
@@ -112,7 +110,7 @@ class OCRProcessor:
             Diccionario con datos extraidos
         """
         text = self.extract_text(image_path)
-        lines = [l.strip() for l in text.splitlines() if l.strip()]
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
 
         TIPOS = ["parfum", "edp", "eau de parfum", "edt", "eau de toilette", "edc", "eau de cologne"]
 
@@ -134,7 +132,7 @@ class OCRProcessor:
                         break
 
             if result["size"] is None:
-                match = re.search(r'\d+(\.\d+)?\s*(ml|oz)', line_lower)
+                match = re.search(r"\d+(\.\d+)?\s*(ml|oz)", line_lower)
                 if match:
                     result["size"] = match.group(0)
 

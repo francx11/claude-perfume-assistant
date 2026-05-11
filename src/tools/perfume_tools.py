@@ -9,13 +9,17 @@ Este módulo implementa:
 DÍA 4: Implementarás este módulo para darle "superpoderes" a Claude.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 def log_call(func):
+    """Decorator that logs function name and arguments before each call."""
+
     def wrapper(*args, **kwargs):
+        """Execute the wrapped function after logging its invocation."""
         print(f"[tool] {func.__name__} | args={args[1:]} kwargs={kwargs}")
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -35,64 +39,61 @@ class PerfumeTools:
         """
         tool_definitions = []
 
-        tool_definitions.append({
-            "name": "search_perfumes",
-            "description": "Busca perfumes por criterios específicos como marca, notas, temporada",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "brand": {
-                        "type": "string",
-                        "description": "Marca del perfume (ej: Dior, Chanel)"
+        tool_definitions.append(
+            {
+                "name": "search_perfumes",
+                "description": "Busca perfumes por criterios específicos como marca, notas, temporada",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "brand": {"type": "string", "description": "Marca del perfume (ej: Dior, Chanel)"},
+                        "notes": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "Notas olfativas (ej: citrus, woody, floral)",
+                        },
+                        "season": {
+                            "type": "string",
+                            "enum": ["spring", "summer", "fall", "winter", "all-year"],
+                            "description": "Temporada recomendada",
+                        },
                     },
-                    "notes": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "Notas olfativas (ej: citrus, woody, floral)"
-                    },
-                    "season": {
-                        "type": "string",
-                        "enum": ["spring", "summer", "fall", "winter", "all-year"],
-                        "description": "Temporada recomendada"
-                    }
-                }
-            }
-        })
-
-        tool_definitions.append({
-            "name": "get_perfume_details",
-            "description": "Obtiene los detalles completos de un perfume por su ID",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "perfume_id": {
-                        "type": "string",
-                        "description": "ID único del perfume (ej: dior-sauvage)"
-                    }
                 },
-                "required": ["perfume_id"]
             }
-        })
+        )
 
-        tool_definitions.append(  {
-            "name": "recommend_similar",
-            "description": "Recomienda perfumes similares",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "perfume_id": {
-                        "type": "string",
-                        "description": "ID único del perfume (ej: dior-sauvage)"
+        tool_definitions.append(
+            {
+                "name": "get_perfume_details",
+                "description": "Obtiene los detalles completos de un perfume por su ID",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "perfume_id": {"type": "string", "description": "ID único del perfume (ej: dior-sauvage)"}
                     },
-                    "top_k": {
-                        "type": "integer",
-                        "description": "Número de perfumes similares a retornar",
-                        "default": 3
-                    }
+                    "required": ["perfume_id"],
                 },
-                "required": ["perfume_id"]
             }
-        })
+        )
+
+        tool_definitions.append(
+            {
+                "name": "recommend_similar",
+                "description": "Recomienda perfumes similares",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "perfume_id": {"type": "string", "description": "ID único del perfume (ej: dior-sauvage)"},
+                        "top_k": {
+                            "type": "integer",
+                            "description": "Número de perfumes similares a retornar",
+                            "default": 3,
+                        },
+                    },
+                    "required": ["perfume_id"],
+                },
+            }
+        )
 
         return tool_definitions
 
@@ -102,19 +103,16 @@ class PerfumeTools:
         notes: Optional[List[str]] = None,
         season: Optional[str] = None,
         gender: Optional[str] = None,
-        max_results: int = 5
+        max_results: int = 5,
     ) -> List[Dict[str, Any]]:
         """
         Busca perfumes por criterios específicos.
         """
 
         filters = {
-            k: v for k, v in {
-                "brand": brand,
-                "notes": notes,
-                "season": season,
-                "gender": gender
-            }.items() if v is not None
+            k: v
+            for k, v in {"brand": brand, "notes": notes, "season": season, "gender": gender}.items()
+            if v is not None
         }
 
         results = self.data_loader.filter_perfumes(filters)
@@ -137,7 +135,7 @@ class PerfumeTools:
         """
         if self.rag_retriever is None:
             return {"error": "RAG no disponible"}
-        
+
         similar_perfume = self.rag_retriever.find_similar_to_perfume(perfume_id, top_k)
 
         return similar_perfume

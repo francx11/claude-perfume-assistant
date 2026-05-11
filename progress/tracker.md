@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-07
+Last updated: 2026-05-11
 
 ---
 
@@ -43,11 +43,11 @@ Last updated: 2026-05-07
 ### Tooling
 | Topic | Status | Notes |
 |-------|--------|-------|
-| PEP8 formal rules | [ ] | |
-| ruff (linter/formatter) | [ ] | |
-| uv (package manager) | [ ] | |
-| pre-commit hooks | [ ] | |
-| interrogate (docstring coverage) | [ ] | |
+| PEP8 formal rules | [x] | espacios, comas, línea ≤120, snake_case, docstrings, type hints |
+| ruff (linter/formatter) | [x] | ruff check --fix + ruff format; configurable en pyproject.toml |
+| uv (package manager) | [x] | reemplaza pip+requirements.txt; prod vs dev deps en pyproject.toml |
+| pre-commit hooks | [x] | .pre-commit-config.yaml; bloquea commit si ruff/interrogate fallan |
+| interrogate (docstring coverage) | [x] | fail-under=80; ignore-init-method + ignore-magic |
 
 ### Architecture
 | Topic | Status | Notes |

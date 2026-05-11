@@ -9,8 +9,9 @@ Este módulo se encarga de:
 DÍA 3: Implementarás este módulo después de explorar los datos en el notebook.
 """
 
+from typing import Any, Dict, Iterator, List, Optional
+
 import pandas as pd
-from typing import List, Dict, Any, Optional, Iterator
 
 
 class DataLoader:
@@ -33,16 +34,16 @@ class DataLoader:
         except FileNotFoundError:
             raise FileNotFoundError(f"CSV no encontrado: {self.csv_path}")
 
-        if 'name' not in df.columns or 'brand' not in df.columns:
+        if "name" not in df.columns or "brand" not in df.columns:
             raise ValueError("El CSV no tiene las columnas esperadas: 'name', 'brand'")
 
-        df = df.dropna(subset=['name', 'brand'])
+        df = df.dropna(subset=["name", "brand"])
         df = df.drop_duplicates()
-        df['name'] = df['name'].str.strip().str.lower()
-        df['brand'] = df['brand'].str.strip().str.lower()
+        df["name"] = df["name"].str.strip().str.lower()
+        df["brand"] = df["brand"].str.strip().str.lower()
 
-        if 'id' in df.columns:
-            df = df.set_index('id')
+        if "id" in df.columns:
+            df = df.set_index("id")
 
         return df
 
@@ -50,7 +51,7 @@ class DataLoader:
         """
         Retorna todos los perfumes como lista de diccionarios.
         """
-        return self.df.reset_index().to_dict('records')
+        return self.df.reset_index().to_dict("records")
 
     def iter_perfumes(self) -> Iterator[Dict[str, Any]]:
         """
@@ -71,7 +72,7 @@ class DataLoader:
         """
         Busca múltiples perfumes por sus IDs.
         """
-        return self.df.loc[self.df.index.isin(ids)].to_dict('records')
+        return self.df.loc[self.df.index.isin(ids)].to_dict("records")
 
     def filter_perfumes(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
@@ -81,13 +82,8 @@ class DataLoader:
 
         for column, value in filters.items():
             if isinstance(value, (list, set)):
-                df_filtered = df_filtered[
-                    df_filtered[column].isin(set(value))
-                ]
+                df_filtered = df_filtered[df_filtered[column].isin(set(value))]
             else:
-                df_filtered = df_filtered[
-                    df_filtered[column].str.lower() == value.lower()
-                ]
+                df_filtered = df_filtered[df_filtered[column].str.lower() == value.lower()]
 
-        return df_filtered.to_dict('records')
-
+        return df_filtered.to_dict("records")

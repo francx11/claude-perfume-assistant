@@ -9,8 +9,9 @@ Este módulo implementa:
 DÍA 7: Implementarás este módulo para completar tu sistema RAG.
 """
 
+from typing import Any, Dict, List
+
 import numpy as np
-from typing import List, Dict, Any
 
 
 class RAGRetriever:
@@ -32,29 +33,27 @@ class RAGRetriever:
         texts = []
         for perfume in perfumes:
             text = f"{perfume.get('brand', '')} {perfume.get('name', '')}"
-            
-            notes = perfume.get('notes', '')
+
+            notes = perfume.get("notes", "")
             if notes:
                 text += f". Notes: {notes}"
-            
-            description = perfume.get('description', '')
+
+            description = perfume.get("description", "")
             if description:
                 text += f". {description}"
-            
+
             texts.append(text)
 
         self.embeddings_matrix = self.embeddings_generator.generate_embeddings_batch(texts)
         self.perfume_id_to_index = {}
 
         for i, perfume in enumerate(perfumes):
-            self.perfume_id_to_index[perfume['id']] = i
+            self.perfume_id_to_index[perfume["id"]] = i
 
         import os
+
         os.makedirs("data/embeddings", exist_ok=True)
-        self.embeddings_generator.save_embeddings(
-            self.embeddings_matrix,
-            "data/embeddings/perfumes.npy"
-        )
+        self.embeddings_generator.save_embeddings(self.embeddings_matrix, "data/embeddings/perfumes.npy")
 
     def semantic_search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         """

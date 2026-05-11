@@ -10,12 +10,12 @@ Este módulo gestiona la comunicación con Claude, incluyendo:
 DÍA 1: Implementarás este cliente para tu primera conexión con un LLM.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from anthropic import Anthropic
 
 
 class ClaudeClient:
-
     """Cliente para la API de Claude de Anthropic."""
 
     def __init__(self, api_key: str, model: str = "claude-sonnet-4-6"):
@@ -32,15 +32,15 @@ class ClaudeClient:
         messages: List[Dict[str, str]],
         tools: Optional[List[Dict[str, Any]]] = None,
         max_tokens: int = 1024,
-        system: Optional[str] = None
+        system: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Envía un mensaje a Claude y retorna la respuesta.
         """
 
         if tools is not None:
-             for tool in tools:
-                if 'name' not in tool or 'input_schema' not in tool:
+            for tool in tools:
+                if "name" not in tool or "input_schema" not in tool:
                     raise ValueError(f"Tool mal formateada, falta 'name' o 'input_schema': {tool}")
 
         msg = self.client.messages.create(
@@ -48,7 +48,7 @@ class ClaudeClient:
             messages=messages,
             max_tokens=max_tokens,
             **({"tools": tools} if tools is not None else {}),
-            **({"system": system} if system is not None else {})
+            **({"system": system} if system is not None else {}),
         )
 
         return msg.model_dump()
@@ -57,16 +57,8 @@ class ClaudeClient:
         """
         Crea un mensaje de resultado de tool para enviar a Claude.
         """
-        
+
         return {
             "role": "user",
-            "content": [
-                {
-                    "type": "tool_result",
-                    "tool_use_id": tool_use_id,
-                    "content": str(content)
-                }
-            ]
+            "content": [{"type": "tool_result", "tool_use_id": tool_use_id, "content": str(content)}],
         }
-
-    
