@@ -107,7 +107,7 @@ Last updated: 2026-05-12
 | hybrid search (BM25 + semantic) | [ ] | |
 | re-ranking | [ ] | |
 | HyDE | [ ] | |
-| vector stores comparison (Chroma/Pinecone/pgvector/OpenSearch) | [ ] | |
+| vector stores comparison (Chroma/Pinecone/pgvector/OpenSearch) | [x] | Chroma=dev/proto; Pinecone=cloud/escala; pgvector=ya tienes Postgres; OpenSearch=AWS+full-text |
 
 ### Already Known (from days 1–11)
 | Topic | Status | Notes |
