@@ -93,7 +93,7 @@ Last updated: 2026-05-12
 | overfitting + prevention | [x] | modelo memoriza ruido; señal: train↑ test↓; soluciones: regularización, early stopping, más datos, dropout |
 | imbalanced data (SMOTE, class weights) | [x] | modelo predice mayoritaria siempre; soluciones: class_weight, SMOTE, undersampling; métrica: F1 no accuracy |
 | learning rate + gradient descent | [x] | LR=tamaño paso; alta→oscila/diverge; baja→lento; GD=paso en dirección contraria al gradiente; riesgo mínimo local |
-| fine-tuning (transfer learning) | [ ] | |
+| fine-tuning (transfer learning) | [x] | partir de modelo preentrenado + entrenar con datos dominio; vs RAG: cuando conocimiento estático y dataset suficiente |
 | PCA | [ ] | |
 | feature importance | [ ] | |
 
