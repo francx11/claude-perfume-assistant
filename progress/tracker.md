@@ -81,11 +81,11 @@ Last updated: 2026-05-11
 ### Classical ML
 | Topic | Status | Notes |
 |-------|--------|-------|
-| logistic regression | [ ] | |
-| decision tree | [ ] | |
-| random forest | [ ] | |
-| SVM + kernel trick | [ ] | |
-| KNN | [ ] | |
+| logistic regression | [x] | combinación lineal z → sigmoid → prob 0-1; visto sesión anterior |
+| decision tree | [x] | splits sucesivos; profundidad → overfitting; weaknesses: memoriza ruido |
+| random forest | [x] | bagging + feature randomness → decorrelación → voto mayoritario cancela errores |
+| SVM + kernel trick | [x] | hiperplano máximo margen; support vectors; kernel proyecta a dim superior para datos no lineales |
+| KNN | [x] | K vecinos más cercanos por distancia; sin entrenamiento; lento O(n) en predicción |
 | multiclass model selection | [ ] | |
 | confusion matrix (TP/FP/FN/TN) | [ ] | |
 | precision / recall / F1 | [ ] | |
