@@ -100,8 +100,8 @@ Last updated: 2026-05-12
 ### RAG Deep Dive
 | Topic | Status | Notes |
 |-------|--------|-------|
-| chunking strategies | [ ] | |
-| RAG evaluation (RAGAS, faithfulness, relevancy) | [ ] | |
+| chunking strategies | [x] | fixed-size corta contexto; sentence mejor; overlap evita pérdida en bordes; semantic más preciso pero costoso |
+| RAG evaluation (RAGAS, faithfulness, relevancy) | [x] | 2 pilares: retrieval (context precision/recall) + generación (faithfulness/relevancy); LLM como juez; Hit Rate@5 para recommender |
 | ChromaDB (hands-on) | [ ] | |
 | FAISS (hands-on) | [ ] | |
 | hybrid search (BM25 + semantic) | [ ] | |
