@@ -92,7 +92,7 @@ Last updated: 2026-05-12
 | k-fold cross-validation | [x] | K splits, cada uno test una vez; métrica = media de K evals; K=5/10 estándar |
 | overfitting + prevention | [x] | modelo memoriza ruido; señal: train↑ test↓; soluciones: regularización, early stopping, más datos, dropout |
 | imbalanced data (SMOTE, class weights) | [x] | modelo predice mayoritaria siempre; soluciones: class_weight, SMOTE, undersampling; métrica: F1 no accuracy |
-| learning rate + gradient descent | [ ] | |
+| learning rate + gradient descent | [x] | LR=tamaño paso; alta→oscila/diverge; baja→lento; GD=paso en dirección contraria al gradiente; riesgo mínimo local |
 | fine-tuning (transfer learning) | [ ] | |
 | PCA | [ ] | |
 | feature importance | [ ] | |
