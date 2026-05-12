@@ -95,7 +95,7 @@ Last updated: 2026-05-12
 | learning rate + gradient descent | [x] | LR=tamaño paso; alta→oscila/diverge; baja→lento; GD=paso en dirección contraria al gradiente; riesgo mínimo local |
 | fine-tuning (transfer learning) | [x] | partir de modelo preentrenado + entrenar con datos dominio; vs RAG: cuando conocimiento estático y dataset suficiente |
 | PCA | [ ] | |
-| feature importance | [ ] | |
+| feature importance | [x] | permutation importance (barajar columna → medir caída); built-in RandomForest; SHAP para predicciones individuales |
 
 ### RAG Deep Dive
 | Topic | Status | Notes |
