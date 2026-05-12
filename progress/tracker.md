@@ -91,7 +91,7 @@ Last updated: 2026-05-12
 | precision / recall / F1 | [x] | precision=TP/(TP+FP); recall=TP/(TP+FN); F1=media armónica; recall↑ cuando FN es catastrófico |
 | k-fold cross-validation | [x] | K splits, cada uno test una vez; métrica = media de K evals; K=5/10 estándar |
 | overfitting + prevention | [x] | modelo memoriza ruido; señal: train↑ test↓; soluciones: regularización, early stopping, más datos, dropout |
-| imbalanced data (SMOTE, class weights) | [ ] | |
+| imbalanced data (SMOTE, class weights) | [x] | modelo predice mayoritaria siempre; soluciones: class_weight, SMOTE, undersampling; métrica: F1 no accuracy |
 | learning rate + gradient descent | [ ] | |
 | fine-tuning (transfer learning) | [ ] | |
 | PCA | [ ] | |
