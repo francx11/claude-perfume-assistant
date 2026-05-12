@@ -87,8 +87,8 @@ Last updated: 2026-05-12
 | SVM + kernel trick | [x] | hiperplano máximo margen; support vectors; kernel proyecta a dim superior para datos no lineales |
 | KNN | [x] | K vecinos más cercanos por distancia; sin entrenamiento; lento O(n) en predicción |
 | multiclass model selection | [x] | tamaño dataset, cómputo, naturaleza datos (lineal/no-lineal), interpretabilidad |
-| confusion matrix (TP/FP/FN/TN) | [ ] | |
-| precision / recall / F1 | [ ] | |
+| confusion matrix (TP/FP/FN/TN) | [x] | accuracy oculta rendimiento por clase; FP/FN tienen costes distintos según problema |
+| precision / recall / F1 | [x] | precision=TP/(TP+FP); recall=TP/(TP+FN); F1=media armónica; recall↑ cuando FN es catastrófico |
 | k-fold cross-validation | [ ] | |
 | overfitting + prevention | [ ] | |
 | imbalanced data (SMOTE, class weights) | [ ] | |
