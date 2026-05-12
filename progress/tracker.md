@@ -89,7 +89,7 @@ Last updated: 2026-05-12
 | multiclass model selection | [x] | tamaño dataset, cómputo, naturaleza datos (lineal/no-lineal), interpretabilidad |
 | confusion matrix (TP/FP/FN/TN) | [x] | accuracy oculta rendimiento por clase; FP/FN tienen costes distintos según problema |
 | precision / recall / F1 | [x] | precision=TP/(TP+FP); recall=TP/(TP+FN); F1=media armónica; recall↑ cuando FN es catastrófico |
-| k-fold cross-validation | [ ] | |
+| k-fold cross-validation | [x] | K splits, cada uno test una vez; métrica = media de K evals; K=5/10 estándar |
 | overfitting + prevention | [ ] | |
 | imbalanced data (SMOTE, class weights) | [ ] | |
 | learning rate + gradient descent | [ ] | |
