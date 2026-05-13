@@ -104,8 +104,8 @@ Last updated: 2026-05-12
 | RAG evaluation (RAGAS, faithfulness, relevancy) | [x] | 2 pilares: retrieval (context precision/recall) + generación (faithfulness/relevancy); LLM como juez; Hit Rate@5 para recommender |
 | ChromaDB (hands-on) | [x] | collection.add(ids, embeddings, documents, metadatas); hnsw:space cosine; 1-distance=similarity; misma interfaz que RAGRetriever |
 | FAISS (hands-on) | [ ] | |
-| hybrid search (BM25 + semantic) | [ ] | |
-| re-ranking | [ ] | |
+| hybrid search (BM25 + semantic) | [x] | BM25=léxico exacto; semántico=concepto; hybrid=α*BM25+(1-α)*semantic; gana en queries mixtas |
+| re-ranking | [x] | bi-encoder rápido (stage 1, top-100) → cross-encoder preciso (stage 2, top-5); cross-encoder ve query+doc juntos |
 | HyDE | [ ] | |
 | vector stores comparison (Chroma/Pinecone/pgvector/OpenSearch) | [x] | Chroma=dev/proto; Pinecone=cloud/escala; pgvector=ya tienes Postgres; OpenSearch=AWS+full-text |
 
