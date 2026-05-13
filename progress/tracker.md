@@ -147,8 +147,8 @@ Last updated: 2026-05-13
 |-------|--------|-------|
 | pandas groupby / merge / pivot | [x] | groupby+agg, merge(on=key, how=inner/left/outer), pivot(index,columns,values) |
 | pandas memory optimization | [x] | category para strings repetidos; downcast numérico; chunksize para CSVs grandes |
-| polars vs pandas | [ ] | |
-| polars lazy evaluation | [ ] | |
+| polars vs pandas | [x] | Polars=Rust+multi-thread+lazy; pandas=single-thread+eager; Polars 5-100x más rápido en >1GB |
+| polars lazy evaluation | [x] | scan_csv→filter→select→collect(); planifica antes de ejecutar; query optimizer reduce RAM y I/O |
 | PySpark RDD vs DataFrame | [ ] | |
 | PySpark transformations vs actions | [ ] | |
 
