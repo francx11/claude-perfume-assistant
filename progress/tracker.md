@@ -133,9 +133,9 @@ Last updated: 2026-05-13
 | few-shot prompting | [ ] | |
 | chain-of-thought (CoT) | [ ] | |
 | ReAct pattern | [ ] | |
-| LoRA | [ ] | |
-| QLoRA | [ ] | |
-| adapter layers | [ ] | |
+| LoRA | [x] | ΔW=A×B rango bajo; suma paralela a W; merge en inferencia → cero latencia; aplica a Q,K,V |
+| QLoRA | [x] | LoRA + modelo base 4-bit NF4; A,B en bfloat16; ~8x menos memoria; peft+bitsandbytes |
+| adapter layers | [x] | capas down(D→r)+up(r→D) insertadas entre capas transformer; preserva dimensiones; latencia extra en inferencia |
 | agent vs multiagent | [ ] | |
 | guardrails in Bedrock | [ ] | |
 | prompt injection defense | [ ] | |
