@@ -71,8 +71,8 @@ Last updated: 2026-05-13
 | retry + exponential backoff | [x] | 2**intento + random.random(); RateLimitError en ClaudeClient |
 | circuit breaker | [x] | CLOSED→OPEN→HALF_OPEN; max_fallos + tiempo_reset; clase separada (OCP) |
 | data pipeline optimization (generators, chunking) | [x] | generator yield fila a fila → O(1) mem; pd.read_csv(chunksize=N) para batches; cProfile/line_profiler para bottlenecks |
-| pytest coverage (`--cov`) | [ ] | |
-| property-based testing (hypothesis) | [ ] | |
+| pytest coverage (`--cov`) | [x] | |
+| property-based testing (hypothesis) | [x] | |
 
 ---
 
