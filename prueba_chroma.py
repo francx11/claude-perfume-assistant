@@ -1,10 +1,11 @@
-"""Prueba ChromaRetriever vs RAGRetriever original."""
+"""Prueba RAGRetriever vs ChromaRetriever vs FAISSRetriever."""
 
 import time
 
 from src.data.loader import DataLoader
 from src.rag.chroma_retriever import ChromaRetriever
 from src.rag.embeddings import EmbeddingsGenerator
+from src.rag.faiss_retriever import FAISSRetriever
 from src.rag.retriever import RAGRetriever
 
 CSV_PATH = "data/raw/fragrantica.csv"
@@ -48,4 +49,19 @@ t_search_chroma = time.time() - t0
 
 print(f"Build: {t_build_chroma:.2f}s | Search: {t_search_chroma:.4f}s")
 for p in results_chroma:
+    print(f"  [{p['similarity_score']:.3f}] {p.get('brand', '?')} - {p.get('name', '?')}")
+
+# --- FAISSRetriever ---
+print("\n=== FAISSRetriever (IndexFlatIP) ===")
+faiss_ret = FAISSRetriever(gen, loader)
+t0 = time.time()
+faiss_ret.build_index(perfumes)
+t_build_faiss = time.time() - t0
+
+t0 = time.time()
+results_faiss = faiss_ret.semantic_search(QUERY, top_k=TOP_K)
+t_search_faiss = time.time() - t0
+
+print(f"Build: {t_build_faiss:.2f}s | Search: {t_search_faiss:.4f}s")
+for p in results_faiss:
     print(f"  [{p['similarity_score']:.3f}] {p.get('brand', '?')} - {p.get('name', '?')}")
