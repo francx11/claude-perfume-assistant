@@ -11,6 +11,7 @@ class HyDERetriever:
         self.claude_client = claude_client
 
     def semantic_search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        """Generate hypothetical doc from query then delegate to wrapped retriever."""
         hypothetical_doc = self._generate_hypothetical(query)
         return self.retriever.semantic_search(hypothetical_doc, top_k)
 
