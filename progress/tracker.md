@@ -145,8 +145,8 @@ Last updated: 2026-05-13
 ### Data Frameworks
 | Topic | Status | Notes |
 |-------|--------|-------|
-| pandas groupby / merge / pivot | [ ] | |
-| pandas memory optimization | [ ] | |
+| pandas groupby / merge / pivot | [x] | groupby+agg, merge(on=key, how=inner/left/outer), pivot(index,columns,values) |
+| pandas memory optimization | [x] | category para strings repetidos; downcast numérico; chunksize para CSVs grandes |
 | polars vs pandas | [ ] | |
 | polars lazy evaluation | [ ] | |
 | PySpark RDD vs DataFrame | [ ] | |
