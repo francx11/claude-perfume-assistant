@@ -149,8 +149,8 @@ Last updated: 2026-05-13
 | pandas memory optimization | [x] | category para strings repetidos; downcast numérico; chunksize para CSVs grandes |
 | polars vs pandas | [x] | Polars=Rust+multi-thread+lazy; pandas=single-thread+eager; Polars 5-100x más rápido en >1GB |
 | polars lazy evaluation | [x] | scan_csv→filter→select→collect(); planifica antes de ejecutar; query optimizer reduce RAM y I/O |
-| PySpark RDD vs DataFrame | [ ] | |
-| PySpark transformations vs actions | [ ] | |
+| PySpark RDD vs DataFrame | [x] | RDD=sin esquema+lento; DataFrame=esquema+Catalyst optimizer+rápido; usar DataFrame siempre que puedas |
+| PySpark transformations vs actions | [x] | transformation=lazy(filter,select,groupBy); action=ejecuta plan(collect,show,count,write); igual que Polars lazy |
 
 ### Already Known — Pandas (from days 1–11)
 | Topic | Status | Notes |
