@@ -1,12 +1,19 @@
-"""Prueba RAGRetriever vs ChromaRetriever vs FAISSRetriever."""
+"""Prueba RAGRetriever vs ChromaRetriever vs FAISSRetriever vs HyDERetriever."""
 
+import os
 import time
 
+from dotenv import load_dotenv
+
+from src.api.claude_client import ClaudeClient
 from src.data.loader import DataLoader
 from src.rag.chroma_retriever import ChromaRetriever
 from src.rag.embeddings import EmbeddingsGenerator
 from src.rag.faiss_retriever import FAISSRetriever
+from src.rag.hyde_retriever import HyDERetriever
 from src.rag.retriever import RAGRetriever
+
+load_dotenv()
 
 CSV_PATH = "data/raw/fragrantica.csv"
 QUERY = "floral perfume for summer, fresh and light"
@@ -64,4 +71,18 @@ t_search_faiss = time.time() - t0
 
 print(f"Build: {t_build_faiss:.2f}s | Search: {t_search_faiss:.4f}s")
 for p in results_faiss:
+    print(f"  [{p['similarity_score']:.3f}] {p.get('brand', '?')} - {p.get('name', '?')}")
+
+# --- HyDERetriever ---
+print("\n=== HyDERetriever (FAISS + doc hipotético) ===")
+api_key = os.getenv("ANTHROPIC_API_KEY")
+claude = ClaudeClient(api_key=api_key)
+hyde = HyDERetriever(retriever=faiss_ret, claude_client=claude)
+
+t0 = time.time()
+results_hyde = hyde.semantic_search(QUERY, top_k=TOP_K)
+t_search_hyde = time.time() - t0
+
+print(f"Search: {t_search_hyde:.4f}s (incluye llamada LLM)")
+for p in results_hyde:
     print(f"  [{p['similarity_score']:.3f}] {p.get('brand', '?')} - {p.get('name', '?')}")
