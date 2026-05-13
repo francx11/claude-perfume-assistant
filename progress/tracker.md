@@ -136,7 +136,9 @@ Last updated: 2026-05-13
 | LoRA | [x] | ΔW=A×B rango bajo; suma paralela a W; merge en inferencia → cero latencia; aplica a Q,K,V |
 | QLoRA | [x] | LoRA + modelo base 4-bit NF4; A,B en bfloat16; ~8x menos memoria; peft+bitsandbytes |
 | adapter layers | [x] | capas down(D→r)+up(r→D) insertadas entre capas transformer; preserva dimensiones; latencia extra en inferencia |
-| agent vs multiagent | [ ] | |
+| agent vs multiagent | [x] | único=dominio simple; multi=especialización+paralelismo; patrones: orchestrator-worker, pipeline, peer-to-peer |
+| ReAct (deep) | [x] | Thought→Act→Observation explícito; trazabilidad; insertar HITL antes de actions irreversibles |
+| human-in-the-loop | [x] | patrón agentic: Approval(antes), Validation(después), Correction(escalado); no usar en tiempo real/volumen masivo/acciones reversibles |
 | guardrails in Bedrock | [ ] | |
 | prompt injection defense | [ ] | |
 
