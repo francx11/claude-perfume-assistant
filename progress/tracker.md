@@ -132,7 +132,7 @@ Last updated: 2026-05-13
 | zero-shot prompting | [x] | sin ejemplos en el prompt |
 | few-shot prompting | [x] | ejemplos de input→output en el prompt |
 | chain-of-thought (CoT) | [x] | forzar razonamiento paso a paso; zero-shot="think step by step"; few-shot=ejemplos con razonamiento |
-| ReAct pattern | [x] | Reason+Act; intercala razonamiento con tool calls; implementado en PerfumeShop tool_use loop |
+| ReAct pattern | [x] | Thought→Act→Observation explícito en output; trazabilidad de decisiones; OrchestratorAgent razona internamente pero no expone Thoughts |
 | LoRA | [x] | ΔW=A×B rango bajo; suma paralela a W; merge en inferencia → cero latencia; aplica a Q,K,V |
 | QLoRA | [x] | LoRA + modelo base 4-bit NF4; A,B en bfloat16; ~8x menos memoria; peft+bitsandbytes |
 | adapter layers | [x] | capas down(D→r)+up(r→D) insertadas entre capas transformer; preserva dimensiones; latencia extra en inferencia |
