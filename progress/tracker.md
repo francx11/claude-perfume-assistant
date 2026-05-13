@@ -139,8 +139,8 @@ Last updated: 2026-05-13
 | agent vs multiagent | [x] | único=dominio simple; multi=especialización+paralelismo; patrones: orchestrator-worker, pipeline, peer-to-peer |
 | ReAct (deep) | [x] | Thought→Act→Observation explícito; trazabilidad; insertar HITL antes de actions irreversibles |
 | human-in-the-loop | [x] | patrón agentic: Approval(antes), Validation(después), Correction(escalado); no usar en tiempo real/volumen masivo/acciones reversibles |
-| guardrails in Bedrock | [ ] | |
-| prompt injection defense | [ ] | |
+| guardrails in Bedrock | [x] | servicio AWS que intercepta input/output del LLM; 4 categorías: harmful content, topic filter, PII, grounding; externo al modelo |
+| prompt injection defense | [x] | direct (usuario) vs indirect (RAG/docs); defensas: roles separados, input validation, least privilege, guardrails, output validation |
 
 ### Data Frameworks
 | Topic | Status | Notes |
