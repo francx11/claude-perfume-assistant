@@ -94,7 +94,7 @@ Last updated: 2026-05-13
 | imbalanced data (SMOTE, class weights) | [x] | modelo predice mayoritaria siempre; soluciones: class_weight, SMOTE, undersampling; métrica: F1 no accuracy |
 | learning rate + gradient descent | [x] | LR=tamaño paso; alta→oscila/diverge; baja→lento; GD=paso en dirección contraria al gradiente; riesgo mínimo local |
 | fine-tuning (transfer learning) | [x] | partir de modelo preentrenado + entrenar con datos dominio; vs RAG: cuando conocimiento estático y dataset suficiente |
-| PCA | [ ] | |
+| PCA | [x] | nuevas columnas = combinaciones lineales de originales ordenadas por varianza; reducción de dimensionalidad manteniendo X% varianza |
 | feature importance | [x] | permutation importance (barajar columna → medir caída); built-in RandomForest; SHAP para predicciones individuales |
 
 ### RAG Deep Dive
