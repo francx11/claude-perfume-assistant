@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ---
 
@@ -169,11 +169,14 @@ Last updated: 2026-05-13
 
 | Topic | Status | Notes |
 |-------|--------|-------|
-| LCEL (pipe syntax) | [ ] | |
-| PromptTemplate | [ ] | |
-| Output parsers | [ ] | |
-| VectorStoreRetriever | [ ] | |
-| create_retrieval_chain | [ ] | |
+| LCEL (pipe syntax) | [x] | pipe \| conecta Runnables; composabilidad vs llamadas anidadas |
+| Runnable interface | [x] | interfaz común .invoke(); BaseRetriever/ChatModel/parsers la implementan |
+| PromptTemplate | [x] | ChatPromptTemplate.from_messages(); separa estructura de valores |
+| Output parsers | [x] | StrOutputParser/JsonOutputParser al final del pipe; equivale a json.loads() manual |
+| BaseRetriever | [x] | hereda + implementa _get_relevant_documents(); Runnable gratis |
+| VectorStoreRetriever | [x] | BaseRetriever pre-implementado; vectorstore.as_retriever() |
+| create_retrieval_chain | [x] | retriever → contexto → prompt → LLM; always-on RAG vs tool-use RAG |
+| Contextual compression | [x] | LLMChainExtractor reduce docs a parte relevante; tradeoff: LLM extra por retrieval |
 | RunnableWithMessageHistory | [ ] | |
 | LangGraph StateGraph | [ ] | |
 | LangGraph nodes + edges | [ ] | |
