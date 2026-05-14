@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-14
+Last updated: 2026-05-14 (Phase 3 completa)
 
 ---
 
@@ -177,19 +177,19 @@ Last updated: 2026-05-14
 | VectorStoreRetriever | [x] | BaseRetriever pre-implementado; vectorstore.as_retriever() |
 | create_retrieval_chain | [x] | retriever → contexto → prompt → LLM; always-on RAG vs tool-use RAG |
 | Contextual compression | [x] | LLMChainExtractor reduce docs a parte relevante; tradeoff: LLM extra por retrieval |
-| RunnableWithMessageHistory | [ ] | |
-| LangGraph StateGraph | [ ] | |
-| LangGraph nodes + edges | [ ] | |
-| LangGraph conditional routing | [ ] | |
-| LangGraph human-in-the-loop | [ ] | |
-| LangGraph persistence | [ ] | |
-| LangSmith tracing | [ ] | |
-| LangSmith evaluation datasets | [ ] | |
-| LLM-as-judge evaluation | [ ] | |
-| Langfuse tracing | [ ] | |
-| Langfuse vs LangSmith | [ ] | |
-| Strands Agent tool definition | [ ] | |
-| Strands + Bedrock integration | [ ] | |
+| RunnableWithMessageHistory | [x] | wrapper que inyecta BaseChatMessageHistory por session_id; add_message() abstrae backend (RAM/Redis/Postgres) |
+| LangGraph StateGraph | [x] | TypedDict state compartido entre nodos; graph = nodos + aristas compilados |
+| LangGraph nodes + edges | [x] | nodos=funciones(state→state); arista normal=fija; condicional=función retorna nombre nodo |
+| LangGraph conditional routing | [x] | should_continue() retorna string→nodo; add_conditional_edges() mapea; equivale a while loop manual |
+| LangGraph human-in-the-loop | [x] | interrupt_before=["node"]; checkpoint guarda estado; resume con invoke(None, config=thread_id) |
+| LangGraph persistence | [x] | checkpointer obligatorio para HITL; sin él ValueError; SqliteSaver/PostgresSaver |
+| LangSmith tracing | [x] | LANGCHAIN_TRACING_V2=true; auto-traza nodos/tools/tokens; filtro por fecha+session |
+| LangSmith evaluation datasets | [x] | colección input→output esperado para regression testing |
+| LLM-as-judge evaluation | [x] | LLM califica respuestas de otro LLM con rubrica; riesgo: self-serving bias |
+| Langfuse tracing | [x] | @observe() decorator en cualquier función Python; agnóstico de framework |
+| Langfuse vs LangSmith | [x] | LangSmith=auto LangChain only; Langfuse=manual @observe() + self-hosted + cualquier stack |
+| Strands Agent tool definition | [x] | @tool decorator extrae nombre/desc/tipos de fn+docstring+type hints via inspect; cero JSON manual |
+| Strands + Bedrock integration | [x] | Agent(tools=[...]) abstrae loop; nativo Bedrock pero soporta otros providers |
 
 ---
 
