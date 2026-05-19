@@ -219,10 +219,10 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | Bedrock Knowledge Bases | [x] | pipeline RAG gestionado: ingesta S3 + chunking + embeddings + vector store; retrieve() via bedrock-agent-runtime |
 | Bedrock AgentCore | [x] | runtime gestionado para agentes en producción: sesiones aisladas, concurrencia, memoria persistente; tools=Lambda Action Groups |
 | Bedrock Guardrails | [x] | ya dominado en Phase 2: intercepta input/output; harmful content, topic filter, PII, grounding |
-| DynamoDB partition key + sort key | [ ] | |
-| DynamoDB query vs scan | [ ] | |
-| DynamoDB GSI | [ ] | |
-| DynamoDB single-table design | [ ] | |
+| DynamoDB partition key + sort key | [x] | PK=hash→servidor físico; SK=orden dentro del partition; SK debe ser timestamp no UUID para orden cronológico |
+| DynamoDB query vs scan | [x] | query=PK obligatorio→eficiente O(log n); scan=toca todos los servidores→caro; ScanIndexForward=False+Limit para más reciente |
+| DynamoDB GSI | [x] | índice alternativo con diferente PK/SK; replica datos internamente; usar cuando query frecuente por atributo no-PK |
+| DynamoDB single-table design | [x] | sin joins→múltiples tablas=múltiples round trips; co-localizar entidades relacionadas bajo mismo PK con prefijos en SK |
 | Textract DetectDocumentText | [ ] | |
 | Textract AnalyzeDocument | [ ] | |
 | SageMaker (conceptual) | [ ] | |
