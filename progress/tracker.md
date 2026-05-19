@@ -223,8 +223,8 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | DynamoDB query vs scan | [x] | query=PK obligatorio→eficiente O(log n); scan=toca todos los servidores→caro; ScanIndexForward=False+Limit para más reciente |
 | DynamoDB GSI | [x] | índice alternativo con diferente PK/SK; replica datos internamente; usar cuando query frecuente por atributo no-PK |
 | DynamoDB single-table design | [x] | sin joins→múltiples tablas=múltiples round trips; co-localizar entidades relacionadas bajo mismo PK con prefijos en SK |
-| Textract DetectDocumentText | [ ] | |
-| Textract AnalyzeDocument | [ ] | |
+| Textract DetectDocumentText | [x] | texto plano=bloques LINE/WORD; equivalente a Tesseract sin preprocesado manual; Document=Bytes o S3Object |
+| Textract AnalyzeDocument | [x] | FeatureTypes=["FORMS","TABLES"]; extrae key-value pairs y celdas de tabla; más caro que DetectDocumentText |
 | SageMaker (conceptual) | [ ] | |
 | Athena (conceptual) | [ ] | |
 | OpenSearch vector search (conceptual) | [ ] | |
