@@ -214,11 +214,11 @@ Last updated: 2026-05-14 (Phase 3 completa)
 | Lambda layers | [ ] | |
 | Lambda cold start | [ ] | |
 | Lambda packaging dependencies | [ ] | |
-| Bedrock Converse API | [ ] | |
-| Bedrock InvokeModel | [ ] | |
-| Bedrock Knowledge Bases | [ ] | |
-| Bedrock AgentCore | [ ] | |
-| Bedrock Guardrails | [ ] | |
+| Bedrock Converse API | [x] | schema unificado multi-modelo; content=[{"text":""}]; inferenceConfig; system=[{"text":""}]; response["output"]["message"]["content"][0]["text"] |
+| Bedrock InvokeModel | [x] | model-specific params (extended thinking, top_k); usar cuando Converse no expone feature necesario |
+| Bedrock Knowledge Bases | [x] | pipeline RAG gestionado: ingesta S3 + chunking + embeddings + vector store; retrieve() via bedrock-agent-runtime |
+| Bedrock AgentCore | [x] | runtime gestionado para agentes en producción: sesiones aisladas, concurrencia, memoria persistente; tools=Lambda Action Groups |
+| Bedrock Guardrails | [x] | ya dominado en Phase 2: intercepta input/output; harmful content, topic filter, PII, grounding |
 | DynamoDB partition key + sort key | [ ] | |
 | DynamoDB query vs scan | [ ] | |
 | DynamoDB GSI | [ ] | |
