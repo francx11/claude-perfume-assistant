@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-20 (boto3 + Lambda marcados [x])
+Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 
 ---
 
