@@ -265,6 +265,7 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | Terraform HCL syntax | [ ] | |
 | Terraform state file | [ ] | |
 | Terraform plan / apply | [ ] | |
+| Terraform modules | [ ] | |
 | Terraform AWS provider | [ ] | |
 
 ---
