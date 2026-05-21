@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
+Last updated: 2026-05-20 (sync con study-plan: topics faltantes añadidos)
 
 ---
 
