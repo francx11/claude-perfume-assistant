@@ -205,10 +205,10 @@ Last updated: 2026-05-20 (sync con study-plan: topics faltantes añadidos)
 ### boto3 + Core Services
 | Topic | Status | Notes |
 |-------|--------|-------|
-| boto3 client vs resource | [ ] | |
-| session + credential management | [ ] | |
-| boto3 error handling (ClientError) | [ ] | |
-| boto3 paginator | [ ] | |
+| boto3 client vs resource | [x] | |
+| session + credential management | [x] | |
+| boto3 error handling (ClientError) | [x] | |
+| boto3 paginator | [x] | |
 | S3 CRUD (upload/download/delete) | [ ] | |
 | S3 presigned URLs | [ ] | |
 | S3 event notifications | [ ] | |
