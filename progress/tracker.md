@@ -214,12 +214,12 @@ Last updated: 2026-05-20 (sync con study-plan: topics faltantes añadidos)
 | S3 event notifications | [ ] | |
 | S3 storage classes | [ ] | |
 | S3 versioning | [ ] | |
-| Lambda handler + signature | [ ] | |
-| Lambda layers | [ ] | |
-| Lambda cold start | [ ] | |
-| Lambda packaging dependencies | [ ] | |
-| Lambda environment variables | [ ] | |
-| Lambda timeout / memory limits | [ ] | |
+| Lambda handler + signature | [x] | |
+| Lambda layers | [x] | |
+| Lambda cold start | [x] | |
+| Lambda packaging dependencies | [x] | |
+| Lambda environment variables | [x] | |
+| Lambda timeout / memory limits | [x] | |
 | Bedrock Converse API | [x] | schema unificado multi-modelo; content=[{"text":""}]; inferenceConfig; system=[{"text":""}]; response["output"]["message"]["content"][0]["text"] |
 | Bedrock InvokeModel | [x] | model-specific params (extended thinking, top_k); usar cuando Converse no expone feature necesario |
 | Bedrock Knowledge Bases | [x] | pipeline RAG gestionado: ingesta S3 + chunking + embeddings + vector store; retrieve() via bedrock-agent-runtime |
