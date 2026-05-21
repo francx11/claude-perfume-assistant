@@ -208,8 +208,12 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | boto3 client vs resource | [ ] | |
 | session + credential management | [ ] | |
 | boto3 error handling (ClientError) | [ ] | |
+| boto3 paginator | [ ] | |
 | S3 CRUD (upload/download/delete) | [ ] | |
 | S3 presigned URLs | [ ] | |
+| S3 event notifications | [ ] | |
+| S3 storage classes | [ ] | |
+| S3 versioning | [ ] | |
 | Lambda handler + signature | [ ] | |
 | Lambda layers | [ ] | |
 | Lambda cold start | [ ] | |
