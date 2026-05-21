@@ -231,13 +231,13 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 | DynamoDB single-table design | [x] | sin joins→múltiples tablas=múltiples round trips; co-localizar entidades relacionadas bajo mismo PK con prefijos en SK |
 | Textract DetectDocumentText | [x] | texto plano=bloques LINE/WORD; equivalente a Tesseract sin preprocesado manual; Document=Bytes o S3Object |
 | Textract AnalyzeDocument | [x] | FeatureTypes=["FORMS","TABLES"]; extrae key-value pairs y celdas de tabla; más caro que DetectDocumentText |
-| Textract quality issues | [ ] | |
-| Textract vs Tesseract | [ ] | |
-| SageMaker (conceptual) | [ ] | |
-| Athena (conceptual) | [ ] | |
-| OpenSearch vector search (conceptual) | [ ] | |
-| EKS (conceptual) | [ ] | |
-| EC2 (conceptual) | [ ] | |
+| Textract quality issues | [x] | |
+| Textract vs Tesseract | [x] | |
+| SageMaker (conceptual) | [x] | |
+| Athena (conceptual) | [x] | |
+| OpenSearch vector search (conceptual) | [x] | |
+| EKS (conceptual) | [x] | |
+| EC2 (conceptual) | [x] | |
 
 ---
 
