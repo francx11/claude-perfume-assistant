@@ -200,7 +200,7 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 |-------|--------|-------|
 | FastAPI basics | [x] | Day 5, 6 |
 | async/await | [x] | Day 5 |
-| WebSockets (Loopgate) | [~] | Built but no notes |
+| WebSockets (Loopgate) | [x] | Built but no notes |
 
 ### boto3 + Core Services
 | Topic | Status | Notes |
