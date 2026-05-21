@@ -268,6 +268,14 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | Terraform modules | [ ] | |
 | Terraform AWS provider | [ ] | |
 
+### FastAPI Advanced + WebSockets
+| Topic | Status | Notes |
+|-------|--------|-------|
+| WebSockets in FastAPI | [~] | Built in Loopgate but no notes |
+| connection manager (multi-WS) | [ ] | |
+| FastAPI BackgroundTasks | [ ] | |
+| FastAPI middleware | [ ] | |
+
 ---
 
 ## Phase 6: Interview Simulation
