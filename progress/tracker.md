@@ -249,6 +249,7 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | multi-stage builds | [ ] | |
 | Docker image layers | [ ] | |
 | docker-compose | [ ] | |
+| .dockerignore | [ ] | |
 | K8s Pod | [ ] | |
 | K8s Deployment | [ ] | |
 | K8s Service (types) | [ ] | |
