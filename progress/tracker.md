@@ -209,11 +209,11 @@ Last updated: 2026-05-20 (boto3 + Lambda marcados [x])
 | session + credential management | [x] | |
 | boto3 error handling (ClientError) | [x] | |
 | boto3 paginator | [x] | |
-| S3 CRUD (upload/download/delete) | [ ] | |
-| S3 presigned URLs | [ ] | |
-| S3 event notifications | [ ] | |
-| S3 storage classes | [ ] | |
-| S3 versioning | [ ] | |
+| S3 CRUD (upload/download/delete) | [x] | |
+| S3 presigned URLs | [x] | |
+| S3 event notifications | [x] | |
+| S3 storage classes | [x] | |
+| S3 versioning | [x] | |
 | Lambda handler + signature | [x] | |
 | Lambda layers | [x] | |
 | Lambda cold start | [x] | |
