@@ -258,8 +258,10 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | K8s HPA | [ ] | |
 | GitHub Actions workflow syntax | [ ] | |
 | GitHub Actions jobs + steps | [ ] | |
+| GitHub Actions triggers | [ ] | |
 | GitHub Actions secrets | [ ] | |
 | GitHub Actions caching | [ ] | |
+| GitHub Actions matrix builds | [ ] | |
 | Terraform HCL syntax | [ ] | |
 | Terraform state file | [ ] | |
 | Terraform plan / apply | [ ] | |
