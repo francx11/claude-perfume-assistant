@@ -218,6 +218,8 @@ Last updated: 2026-05-19 (Phase 4 Bedrock en progreso)
 | Lambda layers | [ ] | |
 | Lambda cold start | [ ] | |
 | Lambda packaging dependencies | [ ] | |
+| Lambda environment variables | [ ] | |
+| Lambda timeout / memory limits | [ ] | |
 | Bedrock Converse API | [x] | schema unificado multi-modelo; content=[{"text":""}]; inferenceConfig; system=[{"text":""}]; response["output"]["message"]["content"][0]["text"] |
 | Bedrock InvokeModel | [x] | model-specific params (extended thinking, top_k); usar cuando Converse no expone feature necesario |
 | Bedrock Knowledge Bases | [x] | pipeline RAG gestionado: ingesta S3 + chunking + embeddings + vector store; retrieve() via bedrock-agent-runtime |
