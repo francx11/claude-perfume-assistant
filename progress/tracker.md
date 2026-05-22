@@ -253,6 +253,16 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 | Unity Catalog | [x] | Gobernanza centralizada; namespace 3 niveles catalog.schema.table; reemplaza Hive Metastore por workspace |
 | Tipos de cluster | [x] | All-purpose=dev interactivo; Job=ephemeral producción (más barato); SQL Warehouse=BI/SQL únicamente |
 
+### Module 2: Delta Lake Deep Dive
+| Topic | Status | Notes |
+|-------|--------|-------|
+| Transaction log (atomicity mechanism) | [x] | Parquet files primero → JSON log entry al final; log entry = commit; sin log = orphan files invisibles a lectores |
+| Time Travel | [x] | `versionAsOf` / `timestampAsOf`; `dt.history().show()`; restore = read histórico + write overwrite |
+| MERGE INTO (upsert) | [x] | whenMatchedUpdate + whenNotMatchedInsert; omitir whenNotMatchedBySourceDelete para no borrar ausentes |
+| Partitioning | [x] | baja cardinalidad + frecuente en WHERE + >1GB por partición; anti-pattern: alta cardinalidad (user_id) |
+| Z-ordering | [x] | clustering a nivel de archivo, no carpeta; ideal alta cardinalidad (product_id); `OPTIMIZE ... ZORDER BY` |
+| OPTIMIZE + VACUUM | [x] | OPTIMIZE compacta small files; VACUUM borra orphan Parquet; RETAIN 0 mata time travel + puede romper lectores activos |
+
 ---
 
 ## Phase 5: Plus
