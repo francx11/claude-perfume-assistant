@@ -263,6 +263,22 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 | Z-ordering | [x] | clustering a nivel de archivo, no carpeta; ideal alta cardinalidad (product_id); `OPTIMIZE ... ZORDER BY` |
 | OPTIMIZE + VACUUM | [x] | OPTIMIZE compacta small files; VACUUM borra orphan Parquet; RETAIN 0 mata time travel + puede romper lectores activos |
 
+### Module 3: PySpark en Databricks
+| Topic | Status | Notes |
+|-------|--------|-------|
+| PySpark vs pandas (cuándo usar cada uno) | [x] | pandas <1GB una máquina; PySpark >1GB distribuido; overhead coordinar workers no vale para datos pequeños |
+| SparkSession en Databricks | [x] | `spark` ya existe globalmente; no necesitas crear SparkSession en Databricks |
+| DataFrame read (3 formas) | [x] | `spark.table()` Unity Catalog+governance; `.load(path)` acceso S3 directo; `spark.sql()` queries complejas/SQL |
+| Transformations comunes | [x] | filter, withColumn, drop, dropDuplicates, withColumnRenamed; todas lazy |
+| Window functions | [x] | `partitionBy + orderBy + row_number().over(window)` → filtrar row_num==1; no confundir con groupBy que colapsa filas |
+| Write modes (overwrite/append/merge) | [x] | overwrite=full refresh; append=additive sin duplicados; merge=CDC/upsert idempotente |
+| dbutils.secrets | [x] | `dbutils.secrets.get(scope, key)`; nunca hardcodear credenciales en notebooks |
+| dbutils.fs / widgets / notebook | [x] | ls/cp/rm/mkdirs; widgets para params interactivos; notebook.run() para orquestar |
+| Auto Loader | [x] | `format("cloudFiles")`; detecta archivos nuevos S3/ADLS sin listar todo el bucket |
+| Checkpoint (Auto Loader) | [x] | registra archivos procesados → idempotente; si borras: reprocesa todo desde cero |
+| trigger(availableNow=True) | [x] | procesa todos los pendientes y para → job nocturno; vs processingTime=streaming continuo |
+| Medallion Architecture | [x] | Bronze=raw inmutable append-only; Silver=clean+validado+dedup; Gold=agregado business-ready; reprocessar desde Bronze si hay bug |
+
 ---
 
 ## Phase 5: Plus
