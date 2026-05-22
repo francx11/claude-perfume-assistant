@@ -241,6 +241,20 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 
 ---
 
+## Databricks
+
+### Module 1: Architecture & Core Concepts
+| Topic | Status | Notes |
+|-------|--------|-------|
+| Data Lake vs Data Warehouse vs Lakehouse | [x] | Lakehouse = almacenamiento barato + ACID + soporte ML nativo |
+| Delta Lake | [x] | Capa transaccional sobre Parquet en S3; `_delta_log/` actúa como WAL; resuelve escrituras concurrentes |
+| Parquet (columnar format) | [x] | Columnar vs fila-a-fila; compresión superior; estadísticas por bloque para skip de datos |
+| ACID (definición y letras) | [x] | A=Atomicidad, C=Consistencia, I=Aislamiento (escrituras concurrentes), D=Durabilidad |
+| Unity Catalog | [x] | Gobernanza centralizada; namespace 3 niveles catalog.schema.table; reemplaza Hive Metastore por workspace |
+| Tipos de cluster | [x] | All-purpose=dev interactivo; Job=ephemeral producción (más barato); SQL Warehouse=BI/SQL únicamente |
+
+---
+
 ## Phase 5: Plus
 
 | Topic | Status | Notes |
