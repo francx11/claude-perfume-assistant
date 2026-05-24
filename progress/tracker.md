@@ -292,6 +292,18 @@ Last updated: 2026-05-24 (Databricks Module 4 completo)
 | Triggers (cron / file arrival / REST API) | [x] | cron=horario fijo; file arrival=S3 event; REST API=sistema externo dispara |
 | Retry + alertas | [x] | max_retries=3 suficiente para 20% fallo; timeout_seconds por task; alerts email/Slack on_failure |
 
+### Module 5: MLflow en Databricks
+| Topic | Status | Notes |
+|-------|--------|-------|
+| Experiment tracking (log_param/metric/artifact/model) | [x] | log_param=hiperparámetros fijos; log_metric=resultados evaluables (soporta step=); log_artifact=archivos; log_model=modelo serializado |
+| autolog vs logging manual | [x] | autolog captura todo lo interno de sklearn; manual para artefactos custom y métricas de negocio |
+| MLflow Model Registry (stages) | [x] | None→Staging→Production→Archived; transition_model_version_stage(); solo un modelo por stage |
+| Model Registry aliases | [x] | @champion/@challenger en MLflow>=2.0; permite múltiples modelos activos simultáneos → A/B testing; mejor que stages |
+| Cargar modelo desde Registry | [x] | `mlflow.sklearn.load_model("models:/PerfumeClassifier@champion")` |
+| spark_udf para scoring masivo | [x] | `mlflow.pyfunc.spark_udf(spark, model_uri)`; distribuye predicciones en workers; evita .toPandas() + RAM overflow |
+| Training-serving skew | [x] | features calculadas distinto en training vs producción → predicciones silenciosamente malas |
+| Feature Store | [x] | features calculadas una vez, reutilizadas en training y producción; elimina training-serving skew |
+
 ---
 
 ## Phase 5: Plus
