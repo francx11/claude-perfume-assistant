@@ -279,6 +279,19 @@ Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
 | trigger(availableNow=True) | [x] | procesa todos los pendientes y para → job nocturno; vs processingTime=streaming continuo |
 | Medallion Architecture | [x] | Bronze=raw inmutable append-only; Silver=clean+validado+dedup; Gold=agregado business-ready; reprocessar desde Bronze si hay bug |
 
+### Module 4: Workflows + Orchestration
+| Topic | Status | Notes |
+|-------|--------|-------|
+| Databricks Jobs vs Airflow | [x] | Jobs=100% Databricks; Airflow=multi-sistema externo |
+| Job anatomy (tasks + dependencias) | [x] | depends_on define orden; tasks paralelas cuando comparten upstream |
+| `%run` vs `dbutils.notebook.run()` | [x] | %run=mismo contexto, solo notebooks interactivos; dbutils=proceso separado, válido en Jobs, solo retorna string |
+| Task Values (set/get) | [x] | `taskValues.set(key, value)` upstream; `taskValues.get(taskKey, key)` downstream |
+| Job parameters (widgets) | [x] | `dbutils.widgets.text/get`; accesibles desde todos los tasks |
+| Job cluster vs All-purpose cluster | [x] | Job=ephemeral, muere al terminar, producción; All-purpose=siempre encendido, solo dev |
+| Shared cluster | [x] | múltiples jobs comparten; bueno para jobs cortos y frecuentes; menos aislamiento |
+| Triggers (cron / file arrival / REST API) | [x] | cron=horario fijo; file arrival=S3 event; REST API=sistema externo dispara |
+| Retry + alertas | [x] | max_retries=3 suficiente para 20% fallo; timeout_seconds por task; alerts email/Slack on_failure |
+
 ---
 
 ## Phase 5: Plus
