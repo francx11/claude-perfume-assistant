@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-21 (Phase 4 completa — resto marcado [x])
+Last updated: 2026-05-24 (Databricks Module 4 completo)
 
 ---
 
