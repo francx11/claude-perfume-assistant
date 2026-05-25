@@ -292,6 +292,17 @@ Last updated: 2026-05-25 (Databricks Module 6 completo)
 | Triggers (cron / file arrival / REST API) | [x] | cron=horario fijo; file arrival=S3 event; REST API=sistema externo dispara |
 | Retry + alertas | [x] | max_retries=3 suficiente para 20% fallo; timeout_seconds por task; alerts email/Slack on_failure |
 
+### Module 6: Databricks SQL + Lakehouse
+| Topic | Status | Notes |
+|-------|--------|-------|
+| SQL Warehouse vs All-purpose cluster | [x] | SQL Warehouse=JDBC/ODBC+Photon+BI tools; All-purpose=PySpark+ML+notebooks |
+| Photon engine | [x] | C++ vectorized engine; hasta 12x más rápido que Spark JVM para SQL puro |
+| Managed vs External tables | [x] | Managed=DROP borra datos; External=DROP solo borra metadata; Bronze=External, Silver/Gold=Managed |
+| Dynamic partition overwrite | [x] | spark.sql.sources.partitionOverwriteMode=dynamic; solo toca particiones presentes en datos nuevos |
+| Delta Live Tables (DLT) | [x] | @dlt.table declarativo; DLT infiere orden desde dlt.read(); vs Jobs=imperativo manual |
+| DLT expectations | [x] | expect=log; expect_or_drop=elimina fila; expect_or_fail=para pipeline; quarantine=tabla separada |
+| Unity Catalog permissions | [x] | GRANT SELECT/MODIFY/CREATE TABLE ON CATALOG/SCHEMA/TABLE; herencia hacia abajo; sin GRANT especial para SQL Warehouse |
+
 ### Module 5: MLflow en Databricks
 | Topic | Status | Notes |
 |-------|--------|-------|
