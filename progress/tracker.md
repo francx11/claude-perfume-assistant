@@ -347,10 +347,10 @@ Last updated: 2026-05-25 (Phase 5 completo: Docker, K8s, GitHub Actions, Terrafo
 ### FastAPI Advanced + WebSockets
 | Topic | Status | Notes |
 |-------|--------|-------|
-| WebSockets in FastAPI | [~] | Built in Loopgate but no notes |
-| connection manager (multi-WS) | [ ] | |
-| FastAPI BackgroundTasks | [ ] | |
-| FastAPI middleware | [ ] | |
+| WebSockets in FastAPI | [x] | conexión bidireccional persistente; HTTP no sirve para push del servidor |
+| connection manager (multi-WS) | [x] | lista de WebSockets activos; broadcast a todos; add/remove en connect/disconnect |
+| FastAPI BackgroundTasks | [x] | responde inmediatamente; tarea pesada corre después; add_task(fn, args) |
+| FastAPI middleware | [x] | intercepta todas requests/responses; logging, auth, CORS, security headers |
 
 ---
 
