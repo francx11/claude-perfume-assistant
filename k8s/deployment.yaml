@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: perfumeshop-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: perfumeshop
+  template:
+    metadata:
+      labels:
+        app: perfumeshop
+    spec:
+      containers:
+      - name: api
+        image: perfumeshop:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: perfumeshop-secrets
