@@ -332,17 +332,17 @@ Last updated: 2026-05-25 (Phase 5 Parts A-D completo: Docker, K8s, GitHub Action
 | K8s Ingress | [x] | un ELB para todos los servicios; enruta por URL; TLS/HTTPS |
 | K8s ConfigMap / Secret | [x] | ConfigMap=config no sensible; Secret=credenciales base64 |
 | K8s HPA | [x] | escala pods automáticamente por CPU/memoria/requests; horizontal=más pods |
-| GitHub Actions workflow syntax | [ ] | |
-| GitHub Actions jobs + steps | [ ] | |
-| GitHub Actions triggers | [ ] | |
-| GitHub Actions secrets | [ ] | |
-| GitHub Actions caching | [ ] | |
-| GitHub Actions matrix builds | [ ] | |
-| Terraform HCL syntax | [ ] | |
-| Terraform state file | [ ] | |
-| Terraform plan / apply | [ ] | |
-| Terraform modules | [ ] | |
-| Terraform AWS provider | [ ] | |
+| GitHub Actions workflow syntax | [x] | .github/workflows/*.yml; YAML; name/on/jobs/steps |
+| GitHub Actions jobs + steps | [x] | job=VM propia; steps=secuenciales en misma VM; jobs paralelos por defecto |
+| GitHub Actions triggers | [x] | push, pull_request, schedule (cron), workflow_dispatch |
+| GitHub Actions secrets | [x] | Settings→Secrets; ${{ secrets.NAME }}; nunca hardcodear en YAML |
+| GitHub Actions caching | [x] | actions/cache@v4; key=hash(requirements.txt); evita reinstalar deps |
+| GitHub Actions matrix builds | [x] | matrix strategy; un job por combinación; corren en paralelo |
+| Terraform HCL syntax | [x] | terraform/provider/resource/data/variable/output/locals; ref: tipo.nombre.attr |
+| Terraform state file | [x] | mapa HCL↔AWS real; perderlo = caos; siempre backend S3 remoto |
+| Terraform plan / apply | [x] | plan=dry-run diff; apply=ejecuta cambios reales; siempre plan antes |
+| Terraform modules | [x] | carpeta con .tf reutilizable; encapsula recursos relacionados |
+| Terraform AWS provider | [x] | region + credenciales; nunca hardcodear; IAM roles o env vars |
 
 ### FastAPI Advanced + WebSockets
 | Topic | Status | Notes |
