@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-25 (Databricks Module 6 completo)
+Last updated: 2026-05-25 (Phase 5 Part A Docker + Part B Kubernetes completo)
 
 ---
 
