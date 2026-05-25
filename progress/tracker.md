@@ -321,17 +321,17 @@ Last updated: 2026-05-25 (Phase 5 Part A Docker + Part B Kubernetes completo)
 
 | Topic | Status | Notes |
 |-------|--------|-------|
-| Dockerfile (key instructions) | [ ] | |
-| multi-stage builds | [ ] | |
-| Docker image layers | [ ] | |
-| docker-compose | [ ] | |
-| .dockerignore | [ ] | |
-| K8s Pod | [ ] | |
-| K8s Deployment | [ ] | |
-| K8s Service (types) | [ ] | |
-| K8s Ingress | [ ] | |
-| K8s ConfigMap / Secret | [ ] | |
-| K8s HPA | [ ] | |
+| Dockerfile (key instructions) | [x] | FROM/COPY/RUN/EXPOSE/CMD/WORKDIR/AS; orden capas menos→más frecuente |
+| multi-stage builds | [x] | AS base/deps/final; imagen final sin herramientas de build; reduce tamaño |
+| Docker image layers | [x] | cada instrucción=capa; cache invalida en cascada; limpiar en mismo RUN |
+| docker-compose | [x] | orquesta multi-servicio; build/ports/volumes/env_file; un solo comando |
+| .dockerignore | [x] | excluye .env, embeddings, __pycache__, prueba*.py de COPY . . |
+| K8s Pod | [x] | unidad mínima; 1+ contenedores comparten red+filesystem; patrón sidecar |
+| K8s Deployment | [x] | gestiona réplicas; reinicia pods fallidos; rolling updates sin downtime |
+| K8s Service (types) | [x] | ClusterIP=interno; NodePort=nodo; LoadBalancer=AWS ELB; IP estable + LB |
+| K8s Ingress | [x] | un ELB para todos los servicios; enruta por URL; TLS/HTTPS |
+| K8s ConfigMap / Secret | [x] | ConfigMap=config no sensible; Secret=credenciales base64 |
+| K8s HPA | [x] | escala pods automáticamente por CPU/memoria/requests; horizontal=más pods |
 | GitHub Actions workflow syntax | [ ] | |
 | GitHub Actions jobs + steps | [ ] | |
 | GitHub Actions triggers | [ ] | |
