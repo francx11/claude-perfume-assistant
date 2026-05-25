@@ -5,6 +5,7 @@ Este archivo inicia el servidor FastAPI con todos los componentes.
 """
 
 import os
+
 from dotenv import load_dotenv
 
 # Cargar variables de entorno
@@ -42,7 +43,7 @@ def main():
         "api.endpoints:app",
         host=host,
         port=port,
-        reload=True  # Auto-reload en desarrollo
+        reload=True,  # Auto-reload en desarrollo
     )
 
 

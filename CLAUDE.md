@@ -32,7 +32,7 @@ pytest tests/ -v -k "test_name"    # single test
 - `.env` — never read or commit
 - `data/embeddings/*.npy` — generated artifacts
 - `__pycache__/`, `*.pyc`, `.pytest_cache/`
-- `prueba*.py` — scratch scripts
+- `scratch/` — scratch scripts, never lint or test
 
 ## Security Rules
 - [HUMAN APPROVAL REQUIRED] Never commit `.env` or any file containing `ANTHROPIC_API_KEY`
