@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-25 (Phase 5 Parts A-D completo: Docker, K8s, GitHub Actions, Terraform)
+Last updated: 2026-05-25 (Phase 5 completo: Docker, K8s, GitHub Actions, Terraform, FastAPI+WebSockets)
 
 ---
 
