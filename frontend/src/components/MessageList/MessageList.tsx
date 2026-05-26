@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { Message } from "../../types/chat";
 import { MessageBubble } from "../MessageBubble/MessageBubble";
-import { PerfumeCard } from "../PerfumeCard/PerfumeCard";
 import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
 import styles from "./MessageList.module.css";
 
