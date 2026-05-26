@@ -12,7 +12,8 @@ class FAISSRetriever:
         self.embeddings_generator = embeddings_generator
         self.data_loader = data_loader
         self._index = None
-        self._id_map: List[str] = []  # FAISS returns int positions, we map back to perfume IDs
+        self._id_map: List[str] = []
+        self._id_to_idx: Dict[str, int] = {}
 
     def build_index(self, perfumes: List[Dict[str, Any]]) -> None:
         """Build FAISS index from perfume list."""
