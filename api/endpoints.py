@@ -94,11 +94,17 @@ async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
     Endpoint principal de chat.
     """
     try:
-        result = http_request.app.state.orchestrator.process_query(request.message)
+        conv_id = request.conversation_id or "default"
+        histories = http_request.app.state.conversation_histories
+        if conv_id not in histories:
+            histories[conv_id] = []
+        result = http_request.app.state.orchestrator.process_query(
+            request.message, conversation_history=histories[conv_id]
+        )
         return ChatResponse(
             response=result["response"],
             perfumes=result.get("perfumes"),
-            conversation_id=request.conversation_id or "default",
+            conversation_id=conv_id,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
