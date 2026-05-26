@@ -23,6 +23,8 @@ from src.agents.orchestrator import OrchestratorAgent
 from src.api.claude_client import ClaudeClient
 from src.data.loader import DataLoader
 from src.ocr.document_processor import OCRProcessor
+from src.rag.embeddings import EmbeddingsGenerator
+from src.rag.faiss_retriever import FAISSRetriever
 from src.tools.perfume_tools import PerfumeTools
 
 _LOG_FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
@@ -69,7 +71,12 @@ async def startup_event():
 
     claude_client = ClaudeClient(api_key=os.getenv("ANTHROPIC_API_KEY"))
     data_loader = DataLoader(csv_path=os.getenv("CSV_PATH"))
-    perfume_tools = PerfumeTools(data_loader=data_loader)
+
+    embeddings_generator = EmbeddingsGenerator()
+    rag_retriever = FAISSRetriever(embeddings_generator=embeddings_generator, data_loader=data_loader)
+    rag_retriever.build_index(data_loader.get_all_perfumes())
+
+    perfume_tools = PerfumeTools(data_loader=data_loader, rag_retriever=rag_retriever)
     orchestrator = OrchestratorAgent(claude_client=claude_client, perfume_tools=perfume_tools)
 
     ocr_processor = OCRProcessor(tesseract_path=os.getenv("TESSERACT_PATH"))
