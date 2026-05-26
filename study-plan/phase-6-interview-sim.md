@@ -47,6 +47,7 @@ Rules Claude will enforce:
 1. What is an embedding? Give an example relevant to your project.
 2. What is an LLM?
 3. What is an agent in an AI system?
+4. What is the difference between generative AI and agentic AI?
 
 **Pass bar:** Connect each answer to PerfumeShop or Loopgate.
 
