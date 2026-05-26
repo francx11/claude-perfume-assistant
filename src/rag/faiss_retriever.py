@@ -35,6 +35,7 @@ class FAISSRetriever:
         self._index = faiss.IndexFlatIP(dimension)
         self._index.add(embeddings)
         self._id_map = [str(p["id"]) for p in perfumes]
+        self._id_to_idx = {pid: i for i, pid in enumerate(self._id_map)}
 
     def semantic_search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         """Search perfumes by cosine similarity using FAISS."""
