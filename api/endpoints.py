@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from src.agents.orchestrator import OrchestratorAgent
@@ -50,6 +51,14 @@ class ChatResponse(BaseModel):
 
 # Crear aplicación FastAPI
 app = FastAPI(title="PerfumeShop AI API", description="API para asistente conversacional de perfumes", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
