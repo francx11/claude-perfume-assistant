@@ -20,10 +20,23 @@ export interface Message {
 export interface ChatRequest {
   message: string;
   conversation_id?: string;
+  client_id: string;
 }
 
 export interface ChatResponse {
   response: string;
   perfumes?: Perfume[];
   conversation_id: string;
+}
+
+export interface HistoryEntry {
+  role: "user" | "assistant";
+  message: string;
+  timestamp: string;
+}
+
+export interface SessionSummary {
+  session_id: string;
+  title: string;
+  updated_at: string;
 }

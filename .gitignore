@@ -17,7 +17,7 @@ ENV/
 
 # Data files (no subir CSV grande)
 data/raw/*.csv
-data/embeddings/*.npy
+data/embeddings/
 
 # IDE
 .vscode/
@@ -36,6 +36,14 @@ htmlcov/
 
 # Logs
 *.log
+logs/
+
+# Runtime data
+db/
+
+# Frontend build & deps
+frontend/dist/
+frontend/node_modules/
 
 # Claude Code local settings (personal, not shared)
 .claude/settings.local.json

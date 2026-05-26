@@ -12,6 +12,7 @@ DÍA 5: Implementarás estos endpoints para exponer tu sistema vía HTTP.
 
 import logging
 import os
+import uuid
 from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
@@ -22,6 +23,7 @@ from pydantic import BaseModel
 from src.agents.orchestrator import OrchestratorAgent
 from src.api.claude_client import ClaudeClient
 from src.api.conversation_logger import ConversationLogger
+from src.api.session_store import SessionStore
 from src.data.loader import DataLoader
 from src.ocr.document_processor import OCRProcessor
 from src.rag.embeddings import EmbeddingsGenerator
@@ -42,6 +44,7 @@ class ChatRequest(BaseModel):
 
     message: str
     conversation_id: Optional[str] = None
+    client_id: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -86,7 +89,7 @@ async def startup_event():
     app.state.data_loader = data_loader
     app.state.perfume_tools = perfume_tools
     app.state.ocr_processor = ocr_processor
-    app.state.conversation_histories = {}
+    app.state.session_store = SessionStore()
     app.state.conversation_logger = ConversationLogger()
 
 
@@ -96,16 +99,14 @@ async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
     Endpoint principal de chat.
     """
     try:
-        conv_id = request.conversation_id or "default"
-        histories = http_request.app.state.conversation_histories
-        if conv_id not in histories:
-            histories[conv_id] = []
-        result = http_request.app.state.orchestrator.process_query(
-            request.message, conversation_history=histories[conv_id]
-        )
+        conv_id = request.conversation_id or str(uuid.uuid4())
+        session_store: SessionStore = http_request.app.state.session_store
+        history = session_store.get(conv_id)
+        result = http_request.app.state.orchestrator.process_query(request.message, conversation_history=history)
+        session_store.save(conv_id, history)
         conv_logger: ConversationLogger = http_request.app.state.conversation_logger
-        conv_logger.log(conv_id, "user", request.message)
-        conv_logger.log(conv_id, "assistant", result["response"])
+        conv_logger.log(conv_id, "user", request.message, client_id=request.client_id)
+        conv_logger.log(conv_id, "assistant", result["response"], client_id=request.client_id)
         return ChatResponse(
             response=result["response"],
             perfumes=result.get("perfumes"),
@@ -148,6 +149,26 @@ async def get_perfume(perfume_id: str) -> Dict[str, Any]:
         return result
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/sessions")
+async def list_sessions(http_request: Request, client_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Returns sessions for a client, ordered by most recent activity."""
+    try:
+        conv_logger: ConversationLogger = http_request.app.state.conversation_logger
+        return conv_logger.list_sessions(client_id=client_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/sessions/{conversation_id}/history")
+async def get_session_history(conversation_id: str, http_request: Request) -> List[Dict[str, Any]]:
+    """Returns logged turns for a session in chronological order."""
+    try:
+        conv_logger: ConversationLogger = http_request.app.state.conversation_logger
+        return conv_logger.get_history(conversation_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

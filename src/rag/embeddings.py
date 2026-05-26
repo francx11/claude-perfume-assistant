@@ -19,22 +19,22 @@ class EmbeddingsGenerator:
     """Generador de embeddings usando sentence-transformers."""
 
     def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-        """
-        Inicializa el generador de embeddings.
-        """
-        self.model = SentenceTransformer(model_name)
         self.model_name = model_name
+        self._model = None
+
+    @property
+    def model(self) -> SentenceTransformer:
+        """Lazy-loaded SentenceTransformer — loads on first access."""
+        if self._model is None:
+            self._model = SentenceTransformer(self.model_name)
+        return self._model
 
     def generate_embedding(self, text: str) -> np.ndarray:
-        """
-        Genera embedding para un texto.
-        """
+        """Generate a single embedding vector for text."""
         return self.model.encode(text)
 
     def generate_embeddings_batch(self, texts: List[str]) -> np.ndarray:
-        """
-        Genera embeddings para múltiples textos (más eficiente).
-        """
+        """Generate embeddings for multiple texts (batched, more efficient)."""
         return self.model.encode(texts)
 
     def save_embeddings(self, embeddings: np.ndarray, filepath: str) -> None:
