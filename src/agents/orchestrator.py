@@ -10,6 +10,7 @@ Este módulo coordina:
 DÍA 6: Implementarás este módulo para integrar todos los componentes.
 """
 
+import json
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -61,7 +62,11 @@ class OrchestratorAgent:
             for tool_use_block in tool_use_blocks:
                 tool_result = self._handle_tool_use(tool_use_block)
                 tool_results_content.append(
-                    {"type": "tool_result", "tool_use_id": tool_use_block["id"], "content": str(tool_result)}
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": tool_use_block["id"],
+                        "content": json.dumps(tool_result, ensure_ascii=False),
+                    }
                 )
 
             conversation_history.append({"role": "user", "content": tool_results_content})
@@ -81,8 +86,6 @@ class OrchestratorAgent:
             if msg["role"] == "user":
                 for block in msg.get("content") or []:
                     if isinstance(block, dict) and block.get("type") == "tool_result":
-                        import json
-
                         try:
                             result = json.loads(block["content"])
                             if isinstance(result, list):
