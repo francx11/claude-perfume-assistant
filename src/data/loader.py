@@ -77,13 +77,35 @@ class DataLoader:
     def filter_perfumes(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Filtra perfumes por múltiples criterios.
+        Notes usa OR substring matching; otros campos usan exact match.
         """
         df_filtered = self.df.copy()
 
         for column, value in filters.items():
+            if column not in df_filtered.columns:
+                continue
             if isinstance(value, (list, set)):
-                df_filtered = df_filtered[df_filtered[column].isin(set(value))]
+                # OR: perfume debe contener al menos una de las notas
+                mask = pd.Series(False, index=df_filtered.index)
+                for v in value:
+                    mask = mask | df_filtered[column].str.lower().str.contains(str(v).lower(), na=False)
+                df_filtered = df_filtered[mask]
             else:
                 df_filtered = df_filtered[df_filtered[column].str.lower() == value.lower()]
 
-        return df_filtered.to_dict("records")
+        return df_filtered.reset_index().to_dict("records")
+
+    def search_by_query(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
+        """
+        Búsqueda libre: cada término debe aparecer en nombre, notas o descripción.
+        """
+        search_columns = [c for c in ["name", "notes", "description", "brand"] if c in self.df.columns]
+        df_filtered = self.df.copy()
+
+        for term in query.lower().split():
+            term_mask = pd.Series(False, index=df_filtered.index)
+            for col in search_columns:
+                term_mask = term_mask | df_filtered[col].str.lower().str.contains(term, na=False)
+            df_filtered = df_filtered[term_mask]
+
+        return df_filtered.head(max_results).reset_index().to_dict("records")
