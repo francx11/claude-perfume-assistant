@@ -42,20 +42,37 @@ class PerfumeTools:
         tool_definitions.append(
             {
                 "name": "search_perfumes",
-                "description": "Busca perfumes por criterios específicos como marca, notas, temporada",
+                "description": (
+                    "Busca perfumes por criterios específicos. "
+                    "Usa 'query' para búsqueda libre en inglés (ej: 'rose jasmine romantic evening'). "
+                    "Combina con 'brand', 'notes' o 'season' para filtros adicionales. "
+                    "Para ocasiones románticas usa términos en inglés: rose, jasmine, vanilla, musk, oud, amber."
+                ),
                 "input_schema": {
                     "type": "object",
                     "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": (
+                                "Búsqueda libre en inglés sobre nombre, notas y descripción "
+                                "(ej: 'rose romantic evening', 'fresh citrus summer', 'woody masculine')"
+                            ),
+                        },
                         "brand": {"type": "string", "description": "Marca del perfume (ej: Dior, Chanel)"},
                         "notes": {
                             "type": "array",
                             "items": {"type": "string"},
-                            "description": "Notas olfativas (ej: citrus, woody, floral)",
+                            "description": "Notas olfativas en inglés (ej: rose, vanilla, citrus, woody, musk)",
                         },
                         "season": {
                             "type": "string",
                             "enum": ["spring", "summer", "fall", "winter", "all-year"],
                             "description": "Temporada recomendada",
+                        },
+                        "gender": {
+                            "type": "string",
+                            "enum": ["male", "female", "unisex"],
+                            "description": "Género del perfume",
                         },
                     },
                 },
@@ -99,6 +116,7 @@ class PerfumeTools:
 
     def search_perfumes(
         self,
+        query: Optional[str] = None,
         brand: Optional[str] = None,
         notes: Optional[List[str]] = None,
         season: Optional[str] = None,
@@ -107,14 +125,32 @@ class PerfumeTools:
     ) -> List[Dict[str, Any]]:
         """
         Busca perfumes por criterios específicos.
+        Si se provee query, arranca desde búsqueda libre; luego aplica filtros adicionales.
         """
+        if query:
+            results = self.data_loader.search_by_query(query, max_results=50)
+            # Aplicar filtros adicionales sobre los resultados de query
+            import pandas as pd
+
+            if results:
+                df = pd.DataFrame(results)
+                if brand and "brand" in df.columns:
+                    df = df[df["brand"].str.lower() == brand.lower()]
+                if season and "season" in df.columns:
+                    df = df[df["season"].str.lower() == season.lower()]
+                if gender and "gender" in df.columns:
+                    df = df[df["gender"].str.lower() == gender.lower()]
+                if notes and "notes" in df.columns:
+                    for note in notes:
+                        df = df[df["notes"].str.lower().str.contains(note.lower(), na=False)]
+                return df.head(max_results).to_dict("records")
+            return []
 
         filters = {
             k: v
             for k, v in {"brand": brand, "notes": notes, "season": season, "gender": gender}.items()
             if v is not None
         }
-
         results = self.data_loader.filter_perfumes(filters)
         return results[:max_results]
 
