@@ -21,6 +21,7 @@ from pydantic import BaseModel
 
 from src.agents.orchestrator import OrchestratorAgent
 from src.api.claude_client import ClaudeClient
+from src.api.conversation_logger import ConversationLogger
 from src.data.loader import DataLoader
 from src.ocr.document_processor import OCRProcessor
 from src.rag.embeddings import EmbeddingsGenerator
@@ -86,6 +87,7 @@ async def startup_event():
     app.state.perfume_tools = perfume_tools
     app.state.ocr_processor = ocr_processor
     app.state.conversation_histories = {}
+    app.state.conversation_logger = ConversationLogger()
 
 
 @app.post("/chat", response_model=ChatResponse)
@@ -101,6 +103,9 @@ async def chat(request: ChatRequest, http_request: Request) -> ChatResponse:
         result = http_request.app.state.orchestrator.process_query(
             request.message, conversation_history=histories[conv_id]
         )
+        conv_logger: ConversationLogger = http_request.app.state.conversation_logger
+        conv_logger.log(conv_id, "user", request.message)
+        conv_logger.log(conv_id, "assistant", result["response"])
         return ChatResponse(
             response=result["response"],
             perfumes=result.get("perfumes"),
