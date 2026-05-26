@@ -28,6 +28,7 @@ from src.data.loader import DataLoader
 from src.ocr.document_processor import OCRProcessor
 from src.rag.embeddings import EmbeddingsGenerator
 from src.rag.faiss_retriever import FAISSRetriever
+from src.storage.s3_client import S3Client
 from src.tools.perfume_tools import PerfumeTools
 
 _LOG_FORMAT = "%(asctime)s %(levelname)s %(name)s %(message)s"
@@ -72,6 +73,14 @@ async def startup_event():
     """Initialize all application components and configure logging."""
     load_dotenv()
     _configure_logging()
+
+    s3 = S3Client(bucket_name=os.getenv("S3_BUCKET_NAME"))
+    csv_path = os.getenv("CSV_PATH")
+    embeddings_path = "data/embeddings/perfumes.npy"
+    if not os.path.exists(csv_path):
+        s3.download_file("data/fragrantica.csv", csv_path)
+    if not os.path.exists(embeddings_path):
+        s3.download_file("embeddings/perfumes.npy", embeddings_path)
 
     claude_client = ClaudeClient(api_key=os.getenv("ANTHROPIC_API_KEY"))
     data_loader = DataLoader(csv_path=os.getenv("CSV_PATH"))

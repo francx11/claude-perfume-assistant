@@ -2,7 +2,7 @@
 
 `[ ]` Not started · `[~]` In progress · `[x]` Mastered
 
-Last updated: 2026-05-25 (Phase 5 completo: Docker, K8s, GitHub Actions, Terraform, FastAPI+WebSockets)
+Last updated: 2026-05-26 (S3 hands-on: boto3 S3Client + FastAPI startup integration + AWS CLI + bucket real)
 
 ---
 
@@ -209,7 +209,7 @@ Last updated: 2026-05-25 (Phase 5 completo: Docker, K8s, GitHub Actions, Terrafo
 | session + credential management | [x] | |
 | boto3 error handling (ClientError) | [x] | |
 | boto3 paginator | [x] | |
-| S3 CRUD (upload/download/delete) | [x] | |
+| S3 CRUD (upload/download/delete) | [x] | hands-on: S3Client con boto3 integrado en FastAPI startup; head_object para existencia; credenciales IAM vs root |
 | S3 presigned URLs | [x] | |
 | S3 event notifications | [x] | |
 | S3 storage classes | [x] | |
