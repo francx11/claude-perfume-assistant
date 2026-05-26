@@ -27,13 +27,6 @@ export function MessageList({ messages, isLoading }: Props) {
       {messages.map((msg) => (
         <div key={msg.id} className={styles.messageGroup}>
           <MessageBubble message={msg} />
-          {msg.perfumes && msg.perfumes.length > 0 && (
-            <div className={styles.cards}>
-              {msg.perfumes.map((p) => (
-                <PerfumeCard key={p.id ?? p.name} perfume={p} />
-              ))}
-            </div>
-          )}
         </div>
       ))}
       {isLoading && (
