@@ -85,6 +85,7 @@ async def startup_event():
     app.state.data_loader = data_loader
     app.state.perfume_tools = perfume_tools
     app.state.ocr_processor = ocr_processor
+    app.state.conversation_histories = {}
 
 
 @app.post("/chat", response_model=ChatResponse)
