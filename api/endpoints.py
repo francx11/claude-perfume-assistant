@@ -75,7 +75,7 @@ async def startup_event():
 
     embeddings_generator = EmbeddingsGenerator()
     rag_retriever = FAISSRetriever(embeddings_generator=embeddings_generator, data_loader=data_loader)
-    rag_retriever.build_index(data_loader.get_all_perfumes())
+    rag_retriever.build_index(data_loader.get_all_perfumes(), csv_path=os.getenv("CSV_PATH"))
 
     perfume_tools = PerfumeTools(data_loader=data_loader, rag_retriever=rag_retriever)
     orchestrator = OrchestratorAgent(claude_client=claude_client, perfume_tools=perfume_tools)
