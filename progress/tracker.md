@@ -358,9 +358,9 @@ Last updated: 2026-05-25 (Phase 5 completo: Docker, K8s, GitHub Actions, Terrafo
 
 | Activity | Status | Score | Notes |
 |----------|--------|-------|-------|
-| Mock interview #1 (basic) | [ ] | — | |
+| Mock interview #1 (basic) | [x] | 2.55/5 | Python 2.4 · ML 2.75 · AI General 2.5 — conceptos OK, faltan código+proyecto en respuestas |
 | Mock interview #2 (intermediate) | [ ] | — | |
 | Mock interview #3 (full, 45 min) | [ ] | — | |
-| All basic questions ≥4/5 | [ ] | — | |
+| All basic questions ≥4/5 | [ ] | — | Repetir básicas antes de mock #3 |
 | All intermediate questions ≥3.5/5 | [ ] | — | |
 | All advanced questions ≥3/5 | [ ] | — | |
