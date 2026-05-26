@@ -42,6 +42,9 @@ class DataLoader:
         df["name"] = df["name"].str.strip().str.lower()
         df["brand"] = df["brand"].str.strip().str.lower()
 
+        if "notes" in df.columns:
+            df["notes"] = df["notes"].str.strip("[]").str.strip()
+
         if "id" in df.columns:
             df = df.set_index("id")
 
@@ -77,19 +80,22 @@ class DataLoader:
     def filter_perfumes(self, filters: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Filtra perfumes por múltiples criterios.
-        Notes usa OR substring matching; otros campos usan exact match.
+        Lists/sets usan OR substring matching. Strings usan substring matching para season/gender,
+        exact match para brand y otros campos escalares.
         """
+        _SUBSTRING_COLUMNS = {"notes", "season", "gender"}
         df_filtered = self.df.copy()
 
         for column, value in filters.items():
             if column not in df_filtered.columns:
                 continue
             if isinstance(value, (list, set)):
-                # OR: perfume debe contener al menos una de las notas
                 mask = pd.Series(False, index=df_filtered.index)
                 for v in value:
                     mask = mask | df_filtered[column].str.lower().str.contains(str(v).lower(), na=False)
                 df_filtered = df_filtered[mask]
+            elif column in _SUBSTRING_COLUMNS:
+                df_filtered = df_filtered[df_filtered[column].str.lower().str.contains(value.lower(), na=False)]
             else:
                 df_filtered = df_filtered[df_filtered[column].str.lower() == value.lower()]
 
@@ -97,15 +103,19 @@ class DataLoader:
 
     def search_by_query(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
         """
-        Búsqueda libre: cada término debe aparecer en nombre, notas o descripción.
+        Búsqueda libre: OR across terms, ranked by match count descending.
+        A result must match at least one term in name, notes, description, or brand.
         """
         search_columns = [c for c in ["name", "notes", "description", "brand"] if c in self.df.columns]
-        df_filtered = self.df.copy()
+        terms = query.lower().split()
 
-        for term in query.lower().split():
-            term_mask = pd.Series(False, index=df_filtered.index)
-            for col in search_columns:
-                term_mask = term_mask | df_filtered[col].str.lower().str.contains(term, na=False)
-            df_filtered = df_filtered[term_mask]
+        df_work = self.df.copy()
 
-        return df_filtered.head(max_results).reset_index().to_dict("records")
+        def _count_matches(row) -> int:
+            text = " ".join(str(row[c]) for c in search_columns if c in row.index).lower()
+            return sum(1 for t in terms if t in text)
+
+        df_work["_score"] = df_work.apply(_count_matches, axis=1)
+        df_filtered = df_work[df_work["_score"] > 0].sort_values("_score", ascending=False)
+
+        return df_filtered.head(max_results).drop(columns=["_score"]).reset_index().to_dict("records")

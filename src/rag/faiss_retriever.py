@@ -54,3 +54,27 @@ class FAISSRetriever:
             perfume["similarity_score"] = float(scores[0][i])
 
         return perfumes
+
+    def find_similar_to_perfume(self, perfume_id: str, top_k: int = 3) -> List[Dict[str, Any]]:
+        """Find perfumes similar to a given perfume using its stored embedding."""
+        if self._index is None or perfume_id not in self._id_to_idx:
+            return []
+
+        idx = self._id_to_idx[perfume_id]
+        # reconstruct works on IndexFlatIP since all vectors are stored verbatim
+        embedding = self._index.reconstruct(idx).reshape(1, -1)
+
+        scores, indices = self._index.search(embedding, top_k + 1)
+
+        pairs = [(self._id_map[i], float(s)) for i, s in zip(indices[0], scores[0]) if self._id_map[i] != perfume_id][
+            :top_k
+        ]
+
+        ids = [pid for pid, _ in pairs]
+        score_map = {pid: s for pid, s in pairs}
+
+        perfumes = self.data_loader.get_perfumes_by_ids(set(ids))
+        for perfume in perfumes:
+            perfume["similarity_score"] = score_map.get(str(perfume.get("id", "")), 0.0)
+
+        return perfumes

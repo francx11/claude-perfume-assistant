@@ -81,6 +81,7 @@ class OrchestratorAgent:
             (b["text"] for b in response["content"] if b["type"] == "text"), "No se pudo generar una respuesta"
         )
 
+        seen_ids: set = set()
         perfumes_mentioned = []
         for msg in conversation_history:
             if msg["role"] == "user":
@@ -89,7 +90,11 @@ class OrchestratorAgent:
                         try:
                             result = json.loads(block["content"])
                             if isinstance(result, list):
-                                perfumes_mentioned.extend(result)
+                                for p in result:
+                                    pid = p.get("id") or p.get("name")
+                                    if pid not in seen_ids:
+                                        seen_ids.add(pid)
+                                        perfumes_mentioned.append(p)
                         except (json.JSONDecodeError, KeyError):
                             pass
 
@@ -129,27 +134,35 @@ class OrchestratorAgent:
             "nunca uses conocimiento externo al contexto recuperado\n"
             "- Sé amable, conversacional y apasionado por los perfumes\n"
             "- Cuando recomiendes perfumes, explica por qué crees que le gustarán al usuario\n"
-            "- Si no encuentras resultados, sugiere alternativas o pide más información al usuario\n"
+            "- Si no encuentras resultados con una búsqueda, inténtalo con notas distintas antes de rendirte\n"
             "- Responde siempre en el idioma del usuario\n\n"
+            "REGLA CRÍTICA para usar search_perfumes:\n"
+            "- El parámetro 'query' solo acepta términos de notas olfativas en inglés que puedan "
+            "aparecer literalmente en los datos del catálogo: rose, jasmine, vanilla, amber, oud, "
+            "cedar, musk, citrus, bergamot, patchouli, iris, sandalwood, etc.\n"
+            "- NUNCA uses términos de ocasión en 'query' (romantic, date, evening, regalo, cita).\n"
+            "- Para ocasión romántica → usa notes=[rose, jasmine, vanilla, amber] o similar.\n"
+            "- Para género y temporada usa los parámetros 'gender' y 'season', no 'query'.\n\n"
             "Antes de actuar, razona internamente qué necesita el usuario y qué tool es más adecuada. "
             "Sigue este patrón:\n\n"
             "<example>\n"
             'Usuario: "busco algo fresco para el verano"\n'
-            "Razonamiento: El usuario quiere frescura y ligereza para clima cálido. "
-            "Implica notas acuáticas, cítricas o verdes. "
-            "No especifica género ni marca — busco en el catálogo por notas y temporada.\n"
-            'Acción: search_perfumes con query "fresco verano acuático cítrico ligero"\n'
-            "Respuesta: Presento los resultados explicando qué notas los hacen frescos "
-            "y por qué funcionan en verano.\n"
+            "Razonamiento: Frescura en verano implica notas cítricas, acuáticas o verdes. "
+            "Uso season=spring-summer y notas concretas del catálogo.\n"
+            'Acción: search_perfumes(notes=["bergamot", "citrus", "cedar", "musk"], season="spring-summer")\n'
+            "Respuesta: Presento los resultados explicando qué notas los hacen frescos.\n"
+            "</example>\n\n"
+            "<example>\n"
+            'Usuario: "quiero un perfume para una cita romántica"\n'
+            "Razonamiento: Cita romántica → notas sensuales y cálidas: rose, jasmine, vanilla, amber, oud. "
+            "Busco por esas notas en el catálogo.\n"
+            'Acción: search_perfumes(notes=["rose", "jasmine", "vanilla", "amber"])\n'
+            "Respuesta: Explico por qué esas notas son románticas y seductoras.\n"
             "</example>\n\n"
             "<example>\n"
             'Usuario: "quiero un perfume similar al Acqua di Gio pero más duradero"\n'
-            "Razonamiento: El usuario tiene un perfume de referencia conocido y pide similitud + "
-            "mayor duración. Mayor duración implica concentración más alta (EDP sobre EDT). "
-            "Lo correcto es buscar similares al perfume de referencia, no hacer búsqueda genérica. "
-            "Luego verifico detalles de los candidatos.\n"
-            "Acción: recommend_similar con el perfume de referencia → "
-            "get_perfume_details para verificar concentración de los candidatos top\n"
-            "Respuesta: Explico qué comparten con Acqua di Gio y cuál tiene mayor duración y por qué.\n"
+            "Razonamiento: Perfume de referencia conocido → busco similares en catálogo con recommend_similar.\n"
+            "Acción: recommend_similar con el ID del perfume de referencia\n"
+            "Respuesta: Explico qué comparten con el original y cuál tiene mayor duración.\n"
             "</example>"
         )

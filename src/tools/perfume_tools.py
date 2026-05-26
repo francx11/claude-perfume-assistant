@@ -66,12 +66,12 @@ class PerfumeTools:
                         },
                         "season": {
                             "type": "string",
-                            "enum": ["spring", "summer", "fall", "winter", "all-year"],
-                            "description": "Temporada recomendada",
+                            "enum": ["spring-summer", "fall-winter", "all-year", "spring"],
+                            "description": "Temporada (spring-summer=primavera/verano, fall-winter=otoño/invierno)",
                         },
                         "gender": {
                             "type": "string",
-                            "enum": ["male", "female", "unisex"],
+                            "enum": ["masculine", "feminine", "unisex"],
                             "description": "Género del perfume",
                         },
                     },
@@ -137,9 +137,9 @@ class PerfumeTools:
                 if brand and "brand" in df.columns:
                     df = df[df["brand"].str.lower() == brand.lower()]
                 if season and "season" in df.columns:
-                    df = df[df["season"].str.lower() == season.lower()]
+                    df = df[df["season"].str.lower().str.contains(season.lower(), na=False)]
                 if gender and "gender" in df.columns:
-                    df = df[df["gender"].str.lower() == gender.lower()]
+                    df = df[df["gender"].str.lower().str.contains(gender.lower(), na=False)]
                 if notes and "notes" in df.columns:
                     for note in notes:
                         df = df[df["notes"].str.lower().str.contains(note.lower(), na=False)]
