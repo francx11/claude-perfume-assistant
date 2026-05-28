@@ -1,51 +1,107 @@
 # PerfumeShop AI
 
-An intelligent conversational assistant that helps users discover and get perfume recommendations from a Fragrantica catalog. Built with Claude API, RAG, Function Calling, and OCR.
+Conversational perfume recommendation system powered by Claude API, RAG, and a Fragrantica catalog.
 
 ## What it does
 
-- Understands natural language queries like "I'm looking for a fresh summer perfume"
-- Searches and filters a perfume catalog semantically using embeddings
-- Returns personalized recommendations via Claude's reasoning
+- Understands natural language queries ("fresh summer perfume", "something like Dior Sauvage")
+- Searches and filters a Fragrantica catalog using semantic embeddings (FAISS + ChromaDB + HyDE)
+- Returns personalized recommendations via Claude's reasoning and tool use
 - Extracts perfume data from images using OCR
-
-## Tech Stack
-
-| Technology                                            | Purpose                                       |
-| ----------------------------------------------------- | --------------------------------------------- |
-| [Claude API](https://www.anthropic.com)               | Natural language understanding and generation |
-| [FastAPI](https://fastapi.tiangolo.com)               | REST API layer                                |
-| [sentence-transformers](https://www.sbert.net)        | Semantic embeddings for RAG                   |
-| [pytesseract](https://github.com/madmaze/pytesseract) | OCR for document processing                   |
-| pandas                                                | Data loading and filtering                    |
+- Persists conversation sessions with SQLite logging
+- Syncs CSV and embeddings from AWS S3 on startup
 
 ## Architecture
 
 ```
-User → FastAPI → Orchestrator Agent → Claude API
-                        ↓                  ↓
-                  Perfume Tools       Function Calling
-                        ↓
-                  RAG Retriever → Embeddings → Vector Search
-                        ↓
-                   Data Loader → Fragrantica CSV
+React Frontend (Vite + TypeScript)
+        ↓ HTTP
+FastAPI  (api/endpoints.py)
+        ↓
+OrchestratorAgent  (tool-use loop, max 5 iter)
+        ↓                          ↓
+ClaudeClient               PerfumeTools
+(src/api)                  (src/tools)
+                                   ↓
+                      FAISSRetriever / ChromaRetriever / HyDERetriever
+                                   ↓
+                      EmbeddingsGenerator (sentence-transformers)
+                                   ↓
+                            DataLoader → Fragrantica CSV
+                                   ↓
+                              S3Client (CSV + embeddings sync)
 ```
+
+Session state: `SessionStore` (in-memory) + `ConversationLogger` (SQLite at `db/chat.db`)
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Claude API (`anthropic`) | NLU, generation, tool use |
+| FastAPI + uvicorn | REST API layer |
+| sentence-transformers | Semantic embeddings |
+| FAISS | Vector index for similarity search |
+| ChromaDB | Alternative vector store |
+| HyDE | Hypothetical document embeddings retrieval |
+| SQLite | Conversation history persistence |
+| AWS S3 (boto3) | Remote storage for CSV and embeddings |
+| React + Vite + TypeScript | Frontend chat UI |
+| Zustand | Frontend state management |
+| pytesseract + Pillow | OCR for image-based perfume data |
+| pytest | Unit and integration tests |
+| Terraform | Infrastructure as code |
+| Kubernetes | Container orchestration manifests |
 
 ## Project Structure
 
 ```
 perfumeshop-ai/
+├── api/
+│   └── endpoints.py         # FastAPI app, routes, startup
 ├── src/
-│   ├── api/          # Claude API client
-│   ├── agents/       # Conversational orchestrator
-│   ├── tools/        # Claude tools (search, filter, recommend)
-│   ├── rag/          # Embeddings + semantic retriever
-│   ├── data/         # CSV loader and data management
-│   └── ocr/          # Document processing with pytesseract
-├── api/              # FastAPI endpoints
-├── data/raw/         # Fragrantica catalog (CSV)
-├── tests/            # Unit and integration tests
-└── notas/            # Learning notes (Spanish)
+│   ├── agents/
+│   │   └── orchestrator.py  # Tool-use loop, conversation driver
+│   ├── api/
+│   │   ├── claude_client.py
+│   │   ├── session_store.py        # In-memory session history
+│   │   └── conversation_logger.py  # SQLite turn logging
+│   ├── data/
+│   │   └── loader.py        # Fragrantica CSV loading and filtering
+│   ├── rag/
+│   │   ├── embeddings.py
+│   │   ├── faiss_retriever.py
+│   │   ├── chroma_retriever.py
+│   │   ├── hyde_retriever.py
+│   │   └── retriever.py     # Base class
+│   ├── ocr/
+│   │   └── document_processor.py
+│   ├── storage/
+│   │   └── s3_client.py
+│   └── tools/
+│       └── perfume_tools.py # Claude tool definitions + dispatch
+├── frontend/
+│   └── src/
+│       ├── components/      # ChatInput, ChatWindow, MessageList,
+│       │                    #   MessageBubble, PerfumeCard,
+│       │                    #   Sidebar, TypingIndicator
+│       ├── services/
+│       │   └── api.ts
+│       └── store/
+│           └── chatStore.ts
+├── data/
+│   ├── raw/                 # Fragrantica CSV (not committed)
+│   └── embeddings/          # .npy + FAISS index (generated)
+├── db/
+│   └── chat.db              # SQLite conversation log
+├── infra/
+│   └── main.tf              # Terraform (AWS)
+├── k8s/                     # Kubernetes manifests
+├── tests/
+├── study-plan/              # Phase-based study docs
+├── progress/
+│   └── tracker.md
+└── notas/                   # Learning notes (Spanish, days 1–11)
 ```
 
 ## Getting Started
@@ -53,63 +109,77 @@ perfumeshop-ai/
 ### Prerequisites
 
 - Python 3.10+
-- An [Anthropic API key](https://console.anthropic.com)
-- Tesseract installed (for OCR features)
+- Node.js 18+ (for frontend)
+- Anthropic API key — [console.anthropic.com](https://console.anthropic.com)
+- Tesseract installed (for OCR)
+- AWS credentials configured (for S3 sync)
 
-### Installation
-
-> **New to Python?** Here's what you need to know first:
->
-> - **pip** is Python's package manager, like npm for Node.js. It installs libraries your project depends on.
-> - **venv** (virtual environment) is an isolated Python installation per project, so dependencies don't conflict between projects. Always use one.
+### Backend
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/perfumeshop-ai.git
-cd perfumeshop-ai
-
-# 2. Create a virtual environment (isolated Python sandbox for this project)
+# 1. Create and activate virtual environment
 python -m venv .venv
+.venv\Scripts\activate          # Windows PowerShell
+source .venv/bin/activate       # macOS / Linux
 
-# 3. Activate it — you must do this every time you open a new terminal
-source .venv/bin/activate        # macOS / Linux
-.venv\Scripts\activate           # Windows (PowerShell)
-.venv\Scripts\activate.bat       # Windows (CMD)
-
-# You'll know it's active when you see (.venv) at the start of your terminal prompt
-
-# 4. Install all dependencies listed in requirements.txt
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 5. Fix a known version conflict between anthropic and httpx
-pip install httpx==0.27.0
-
-# 6. Configure environment variables
+# 3. Configure environment
 cp .env.example .env
-# Open .env and replace the placeholder with your real Anthropic API key
-# Get one at: https://console.anthropic.com
-```
+# Set ANTHROPIC_API_KEY, CSV_PATH, S3_BUCKET_NAME, TESSERACT_PATH
 
-### Run the API
-
-```bash
+# 4. Start API
 python main.py
 # or
 uvicorn api.endpoints:app --reload
 ```
 
-API docs available at `http://localhost:8000/docs`
+API docs: `http://localhost:8000/docs`
 
-## Development Roadmap
+### Frontend
+
+```bash
+cd frontend
+npm install   # or pnpm install
+npm run dev
+```
+
+Frontend: `http://localhost:5173`
+
+## API Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/chat` | Send a message, returns recommendation + session id |
+| `POST` | `/ocr/extract` | Upload image, returns extracted text |
+| `GET` | `/perfumes/{id}` | Lookup a perfume by id |
+| `GET` | `/sessions` | List sessions (optional `?client_id=`) |
+| `GET` | `/sessions/{id}/history` | Get turns for a session |
+| `GET` | `/health` | Health check |
+
+## Development
+
+```bash
+pytest tests/                      # run all tests
+pytest tests/ -v -k "test_name"    # single test
+```
+
+## Roadmap
 
 - [x] Day 1 — Claude API basic connection
-- [ ] Day 3 — Fragrantica CSV loading and cleaning
-- [ ] Day 4 — Claude tools (search, filter, recommend)
-- [ ] Day 5 — FastAPI endpoints
-- [ ] Day 6 — Conversational orchestrator
-- [ ] Day 7 — Embeddings and semantic search (RAG)
-- [ ] Day 8 — pytest test suite
-- [ ] Day 11 — OCR pipeline
+- [x] Day 3 — Fragrantica CSV loading and cleaning
+- [x] Day 4 — Claude tools (search, filter, recommend)
+- [x] Day 5 — FastAPI endpoints
+- [x] Day 6 — Conversational orchestrator
+- [x] Day 7 — Embeddings and semantic search (RAG / FAISS)
+- [x] Day 8 — pytest test suite
+- [x] Day 11 — OCR pipeline
+- [x] Session persistence (in-memory + SQLite logging)
+- [x] React frontend with sidebar and session history
+- [x] ChromaDB and HyDE retrieval strategies
+- [x] AWS S3 integration (CSV + embeddings sync)
+- [x] Terraform + Kubernetes infra
 
 ## License
 
