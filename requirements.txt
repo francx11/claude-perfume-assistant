@@ -14,7 +14,7 @@ numpy==1.26.0
 
 # Machine Learning / RAG
 sentence-transformers==3.3.0
-torch==2.5.0
+torch==2.13.0
 
 # OCR
 pytesseract==0.3.13
